@@ -5,7 +5,7 @@ class Loader:
     def __init__(self):
         pass
 
-    def load(self, meta_data, dna_data, paths, start_time, end_time, participant_id) -> none:
+    def load(self, meta_data, dna_data, paths, start_time, end_time, participant_id) -> None:
         output = {
             "metadata": {
                 "start_at": start_time,
@@ -25,5 +25,7 @@ class Loader:
             with open(paths.output_path, 'w', encoding='utf-8') as f:
                 json.dump(output, f, indent=2, ensure_ascii=False)
             print(f"Output saved successfully to: {paths.output_path}")
+            return output
         except Exception as e:
             print(f"Error saving output: {e}")
+            return None
