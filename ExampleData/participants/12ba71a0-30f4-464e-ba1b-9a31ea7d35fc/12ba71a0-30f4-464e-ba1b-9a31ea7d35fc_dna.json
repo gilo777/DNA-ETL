@@ -1,0 +1,52 @@
+{
+    "test_metadata": {
+        "test_id": "DNA987654",
+        "test_type": "Genetic Profiling",
+        "date_requested": "2024-05-10",
+        "date_completed": "2024-05-20",
+        "status": "Completed",
+        "laboratory_info": {
+            "name": "BioGene Lab Co.",
+            "certification": "CLIA Certified"
+        }
+    },
+    "sample_metadata": {
+        "sample_id": "SAMP123456",
+        "sample_type": "Blood",
+        "collection_date": "2024-05-10",
+        "data_file": "./data/participants/12ba71a0-30f4-464e-ba1b-9a31ea7d35fc"
+    },
+    "analysis_metadata": {
+        "platform": "Illumina HiSeq 4000",
+        "methodology": "Exome Sequencing",
+        "coverage": "50x",
+        "reference_genome": "GRCh37",
+        "variants_detected": {
+            "total": 4500,
+            "pathogenic": 20,
+            "likely_pathogenic": 10,
+            "benign": 4470
+        }
+    },
+    "individual_metadata": {
+        "_individual_id": "IND654321",
+        "_name": "Jane Doe",
+        "date_of_birth": "1969-03-18",
+        "gender": "Female",
+        "ethnicity": "Hispanic",
+        "family_history": {
+            "diseases": [
+                {
+                    "name": "Ovarian Cancer",
+                    "relation": "Mother",
+                    "age_at_diagnosis": 45
+                },
+                {
+                    "name": "Hypertension",
+                    "relation": "Father",
+                    "age_at_diagnosis": 50
+                }
+            ]
+        }
+    }
+}

@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from Constants import year_range_lower, year_range_upper, max_value_len, min_age
+from Pipeline.DataModels_and_Constants.Constants import year_range_lower, year_range_upper, max_value_len, min_age, valid_date_formats
 
 
-class FileValidator:
+class MetaDataValidator:
 
         # check values lengths
         # check participant age
@@ -36,12 +36,12 @@ class FileValidator:
         if self.is_date_string(value):
             date = self.parse_date_string(value)
             if date:
-                if not self.is_date_in_range(date):
+                if not year_range_lower <= date.year <= year_range_upper:
                     valid_value = False
             else:
                 valid_value = False
 
-        valid_value = valid_value and self.is_value_length_valid(value)
+        valid_value = valid_value and len(value) <= max_value_len
         return valid_value
 
     # validate age.
@@ -50,29 +50,25 @@ class FileValidator:
             birth_date = self.parse_date_string(value)
             if birth_date:
                 age = self.calculate_age(birth_date)
+                if(age < min_age):
+                    print(f"participant too young")
                 return age >= min_age
             else:
                 return False
         else:
             return False
 
-    def is_date_in_range(self, date) -> bool:
-        return year_range_lower <= date.year <= year_range_upper
-
-    def is_value_length_valid(self, value: str) -> bool:
-         return len(value) <= max_value_len
+    # def is_date_in_range(self, date) -> bool:
+    #     return year_range_lower <= date.year <= year_range_upper
+    #
+    # def is_value_length_valid(self, value: str) -> bool:
+    #      return len(value) <= max_value_len
 
     # given a string, check if it's a date
     def is_date_string(self, value : str, date_formats=None) -> bool:
         # Common date formats to try
         if date_formats is None:
-            date_formats = [
-                '%Y-%m-%d',  # 2024-01-15
-                '%d/%m/%Y',  # 15/01/2024
-                '%m/%d/%Y',  # 01/15/2024
-                '%Y-%m-%d %H:%M:%S',  # 2024-01-15 14:30:00
-                '%d-%m-%Y',  # 15-01-2024
-            ]
+            date_formats = valid_date_formats
 
         for date_format in date_formats:
             try:
@@ -86,10 +82,7 @@ class FileValidator:
     def parse_date_string(self, value : str, date_formats=None) -> datetime:
         """Parse a date string and return datetime object"""
         if date_formats is None:
-            date_formats = [
-                '%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y',
-                '%Y-%m-%d %H:%M:%S', '%d-%m-%Y'
-            ]
+            date_formats = valid_date_formats
 
         for date_format in date_formats:
             try:

@@ -1,52 +1,154 @@
 {
     "test_metadata": {
-        "test_id": "DNA987654",
-        "test_type": "Genetic Profiling",
-        "date_requested": "2024-05-10",
-        "date_completed": "2024-05-20",
+        "test_id": "TEST345987",
+        "test_type": "Metabolic Profile",
+        "date_requested": "2024-04-01",
+        "date_completed": "2024-04-10",
         "status": "Completed",
         "laboratory_info": {
-            "name": "BioGene Lab Co.",
+            "name": "MetabGene Labs",
             "certification": "CLIA Certified"
         }
     },
     "sample_metadata": {
-        "sample_id": "SAMP123456",
-        "sample_type": "Blood",
-        "collection_date": "2024-05-10",
-        "data_file": "./data/participants/12ba71a0-30f4-464e-ba1b-9a31ea7d35fc"
+        "sample_id": "SAMP987654",
+        "sample_type": "Urine",
+        "collection_date": "2024-04-01",
+        "data_file": "./data/participants/616a0d49-f7e3-44dd-8616-41390d3ab31d"
     },
     "analysis_metadata": {
-        "platform": "Illumina HiSeq 4000",
-        "methodology": "Exome Sequencing",
-        "coverage": "50x",
-        "reference_genome": "GRCh37",
+        "platform": "Illumina NextSeq 500",
+        "methodology": "Targeted Metabolic Sequencing",
+        "coverage": "20x",
+        "reference_genome": "GRCh38",
         "variants_detected": {
-            "total": 4500,
-            "pathogenic": 20,
-            "likely_pathogenic": 10,
-            "benign": 4470
+            "total": 3000,
+            "pathogenic": 10,
+            "likely_pathogenic": 5,
+            "benign": 2985
         }
     },
     "individual_metadata": {
-        "_individual_id": "IND654321",
-        "_name": "Jane Doe",
-        "date_of_birth": "1969-03-18",
-        "gender": "Female",
-        "ethnicity": "Hispanic",
+        "_individual_id": "IND112233",
+        "_name": "Michael Miller",
+        "date_of_birth": "1975-07-25",
+        "gender": "Male",
+        "ethnicity": "Caucasian",
         "family_history": {
             "diseases": [
                 {
-                    "name": "Ovarian Cancer",
+                    "name": "Diabetes",
                     "relation": "Mother",
-                    "age_at_diagnosis": 45
+                    "age_at_diagnosis": 55
                 },
                 {
                     "name": "Hypertension",
                     "relation": "Father",
-                    "age_at_diagnosis": 50
+                    "age_at_diagnosis": 60
                 }
             ]
         }
+    },
+    "treatment_metadata": {
+        "treatment_plan": "Lifestyle changes, blood sugar management",
+        "treatment_start_date": "2024-03-20",
+        "expected_duration": "Ongoing with bi-annual check-ups",
+        "current_medications": [
+            {
+                "name": "Metformin",
+                "dose": "500 mg daily",
+                "purpose": "Blood sugar control"
+            },
+            {
+                "name": "Lisinopril",
+                "dose": "10 mg daily",
+                "purpose": "Blood pressure management"
+            }
+        ],
+        "doctor": "Dr. Laura Green, Endocrinologist"
+    },
+    "environmental_factors": {
+        "smoking_history": "Ex-smoker, quit at age 40",
+        "alcohol_consumption": "Moderate, 1-2 drinks on weekends",
+        "exercise_regimen": "Regular walking, 30 minutes daily",
+        "diet": "Low sugar, high protein, vegetarian",
+        "sleep_patterns": "7 hours per night, restful"
+    },
+    "biomarker_data": {
+        "blood_pressure": "130/85 mmHg",
+        "cholesterol_levels": {
+            "total_cholesterol": "210 mg/dL",
+            "LDL": "120 mg/dL",
+            "HDL": "55 mg/dL",
+            "triglycerides": "140 mg/dL"
+        },
+        "blood_sugar": "Fasting glucose: 95 mg/dL, HbA1c: 5.8%",
+        "kidney_function": {
+            "creatinine": "1.0 mg/dL",
+            "eGFR": "85 mL/min/1.73m\u00b2"
+        },
+        "oxygen_saturation": "98% at rest"
+    },
+    "family_health_history": {
+        "paternal_history": {
+            "heart_disease": "Father diagnosed at 62, underwent surgery",
+            "stroke": "Father suffered a stroke at age 64"
+        },
+        "maternal_history": {
+            "diabetes": "Mother diagnosed at 50, on insulin",
+            "breast_cancer": "Mother diagnosed at 58, treated successfully"
+        },
+        "siblings_health": {
+            "brother": "No significant health issues",
+            "sister": "Healthy, no chronic conditions"
+        }
+    },
+    "genomic_risk_factors": {
+        "BRCA1_variant": "No pathogenic variants found",
+        "APOE_genotype": "APOE \u03b53/\u03b54, higher risk for Alzheimer's",
+        "MTHFR_mutation": "Heterozygous for C677T, slightly increased risk",
+        "FTO_gene": "FTO gene variant, maintains healthy weight",
+        "TP53_mutation": "No mutations associated with cancer risk"
+    },
+    "mental_health_metadata": {
+        "diagnosis": "No psychiatric disorders diagnosed",
+        "medications": "None prescribed",
+        "therapy": "Occasional stress management techniques"
+    },
+    "vaccine_metadata": {
+        "flu_vaccine": "Received annually, last dose in 2023",
+        "COVID_vaccine": "Fully vaccinated, including boosters",
+        "tetanus_vaccine": "Last dose in 2021, next dose due in 2026"
+    },
+    "social_support_metadata": {
+        "caregiver": "Spouse, primary caregiver for health management",
+        "community_involvement": "Volunteer at local food bank",
+        "social_interactions": "Regular interaction with close family and friends"
+    },
+    "activity_level_metadata": {
+        "daily_activity": "Walks 30 minutes daily, light stretching",
+        "weekly_exercise": "Yoga classes twice a week, low impact",
+        "exercise_intensity": "Low intensity, suitable for joint health"
+    },
+    "dietary_supplement_metadata": {
+        "supplements": [
+            {
+                "name": "Vitamin C",
+                "dose": "1000 mg daily",
+                "purpose": "Boost immune system"
+            },
+            {
+                "name": "Magnesium",
+                "dose": "300 mg daily",
+                "purpose": "Support muscle function"
+            }
+        ],
+        "nutritionist": "Consulted with dietitian for meal planning"
+    },
+    "surgical_history_metadata": {
+        "surgery_name": "Knee surgery",
+        "surgery_date": "2018-09-10",
+        "surgery_outcome": "Full recovery with no complications",
+        "follow_up": "Annual check-ups"
     }
 }

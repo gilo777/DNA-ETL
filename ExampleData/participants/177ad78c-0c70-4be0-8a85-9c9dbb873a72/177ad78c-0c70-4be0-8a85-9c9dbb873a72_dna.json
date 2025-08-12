@@ -1,0 +1,55 @@
+{
+    "test_metadata": {
+        "test_id": "GEN789",
+        "test_type": "Genetic Test",
+        "date_requested": "2024-02-01",
+        "date_completed": "2024-02-03",
+        "status": "Completed",
+        "laboratory_info": {
+            "name": "YouthGen Labs",
+            "certification": "CLIA"
+        }
+    },
+    "sample_metadata": {
+        "sample_id": "SAMP321",
+        "sample_type": "Saliva",
+        "collection_date": "2024-02-01",
+        "data_file": "./data/participants/177ad78c-0c70-4be0-8a85-9c9dbb873a72"
+    },
+    "analysis_metadata": {
+        "platform": "Illumina",
+        "methodology": "Exome Sequencing",
+        "coverage": "30x",
+        "reference_genome": "GRCh38",
+        "variants_detected": {
+            "total": 1000,
+            "pathogenic": 2,
+            "likely_pathogenic": 1,
+            "benign": 997
+        }
+    },
+    "individual_metadata": {
+        "_individual_id": "IND123",
+        "_name": "Emma Lee",
+        "date_of_birth": "2008-03-20",
+        "gender": "Female",
+        "ethnicity": "Asian"
+    },
+    "treatment_metadata": {
+        "treatment_plan": "Routine health checkups",
+        "start_date": "2024-01-15",
+        "current_medications": [],
+        "doctor": "Dr. Smith"
+    },
+    "environmental_factors": {
+        "smoking_history": "Non-smoker",
+        "exercise": "Plays soccer",
+        "diet": "Balanced diet",
+        "sleep": "8 hours nightly"
+    },
+    "biomarker_data": {
+        "blood_pressure": "110/70 mmHg",
+        "cholesterol": "180 mg/dL",
+        "blood_sugar": "90 mg/dL"
+    }
+}

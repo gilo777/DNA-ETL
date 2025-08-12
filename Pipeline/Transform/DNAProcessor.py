@@ -3,30 +3,13 @@ from itertools import combinations
 import Levenshtein
 from Levenshtein import matching_blocks
 
-from DataModels.DnaData import DnaData
+from Pipeline.DataModels_and_Constants.DnaData import DnaData
 
 
-class Transformer:
+class DNAProcessor:
 
     def __init__(self):
         self.codon_frequencies = {}
-
-    # Remove all related sensitive data in a metadata dict :
-    def remove_private_keys(self, meta_data : dict) -> dict:
-        cleaned_dict = {}
-
-        for key, value in meta_data.items():
-            if key.startswith("_"):
-                continue
-
-            if isinstance(value, dict):
-                cleaned_dict[key] = self.remove_private_keys(value)
-
-            else:
-                cleaned_dict[key] = value
-
-        return cleaned_dict
-
 
     # transforms the DNA sequences into a dict,
     # for each sequence:
@@ -59,7 +42,10 @@ class Transformer:
     # keeps count of the codon frequencies in a "global" map to later calculate the most frequent codon
     def analyze_sequence(self, sequence : str) -> dict:
         # GC content calculation :
-        gc_count = sequence.count('G') + sequence.count('C')
+        gc_count = 0
+        for nuc in sequence:
+            if nuc == 'G' or nuc == 'C':
+                gc_count += 1
         gc_content = round((gc_count / len(sequence)) * 100, 2)
 
         # as long as possible, check the codon, and move 3 characters to the right :
@@ -98,8 +84,9 @@ class Transformer:
             lcs_value = self.longest_common_subsequence(dna_data.sequences[i], dna_data.sequences[j])
             # if there is one, find all sequences cotaining it and save it.
             if lcs_value:
-                participants = [k for k in range(len(dna_data.sequences))
-                                if self.is_subsequence(lcs_value, dna_data.sequences[k])]
+                participants = [k + 1 for k in range(len(dna_data.sequences))
+                                if lcs_value in dna_data.sequences[k]]
+                # participants = [i + 1, j + 1]
 
                 all_results.append({
                     "value": lcs_value,
@@ -133,4 +120,6 @@ class Transformer:
             return seq1[max_block.a:max_block.a + max_block.size]
         else:
             return ""
+
+
 

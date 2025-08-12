@@ -1,4 +1,4 @@
-from Orchestrator import Orchestrator
+from Pipeline.Orchestrator import Orchestrator
 
 
 def main():
