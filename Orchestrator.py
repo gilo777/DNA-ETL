@@ -3,7 +3,7 @@ from datetime import datetime
 from unittest import loader
 
 from Constants import ValidInputKeys
-from Extructor import Extructor
+from Data_Extractor import Data_Extractor
 from InputValidator import InputValidator
 from Transformer import Transformer
 from Loader import Loader
@@ -11,9 +11,8 @@ from Loader import Loader
 class Orchestrator:
 
     def __init__(self):
-        self.extractor =  Extructor()
         self.input_validator = InputValidator(valid_keys = ValidInputKeys)
-        self.file_extractor = Extructor()
+        self.file_extractor = Data_Extractor()
         self.transformer = Transformer()
         self.loader = Loader()
 
@@ -33,9 +32,15 @@ class Orchestrator:
 
 
          ## input path validation
-        verified_paths, participant_id = self.input_validator.validate(input_path)
-        if verified_paths is None:
-            raise Exception("File {verified_paths} could not be verified")
+
+        validation_result = self.input_validator.validate(input_path)
+        if validation_result is None:
+            raise Exception(f"Input validation failed for path: {input_path}")
+
+        verified_paths, participant_id = validation_result
+        # verified_paths, participant_id = self.input_validator.validate(input_path)
+        # if verified_paths is None:
+        #     raise Exception("File {verified_paths} could not be verified")
 
         start_time = time.time()
 
@@ -50,4 +55,8 @@ class Orchestrator:
 
         end_time = time.time()
 
-        return self.loader.load(transformed_metadata,transformed_dna, verified_paths, start_time, end_time, participant_id)
+        output =  self.loader.load(transformed_metadata,transformed_dna, verified_paths, start_time, end_time, participant_id)
+        if(output is None):
+            return f"pipline failed"
+        else:
+            return output

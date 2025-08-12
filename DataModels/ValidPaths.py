@@ -1,5 +1,5 @@
 class ValidPaths:
-    def __init__(self, dna_path, metadata_path, ouput_path):
+    def __init__(self, dna_path, metadata_path, output_path):
         self.dna_path = dna_path
         self.metadata_path = metadata_path
-        self.ouput_path = ouput_path
+        self.output_path = output_path

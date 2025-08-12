@@ -2,16 +2,15 @@ import json
 
 
 class Loader:
-    def __init__(self):
-        pass
+
 
     def load(self, meta_data, dna_data, paths, start_time, end_time, participant_id) -> None:
         output = {
             "metadata": {
                 "start_at": start_time,
                 "end_at": end_time,
-                "context_path": paths.dna_path,
-                "results_path": paths.metadata_path,
+                "context_path": str(paths.dna_path),
+                "results_path": str(paths.metadata_path),
             },
             "results": [
                 {
@@ -22,7 +21,7 @@ class Loader:
             ],
         }
         try:
-            with open(paths.output_path, 'w', encoding='utf-8') as f:
+            with open(paths.output_path, 'w+', encoding='utf-8') as f:
                 json.dump(output, f, indent=2, ensure_ascii=False)
             print(f"Output saved successfully to: {paths.output_path}")
             return output

@@ -2,7 +2,7 @@ import json
 import uuid
 from importlib.metadata import metadata
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from DataModels.ValidPaths import ValidPaths
 
@@ -12,7 +12,7 @@ class InputValidator:
     def __init__(self, valid_keys: List[str]):
         self.valid_keys = valid_keys
 
-    def validate(self, path : str):
+    def validate(self, path : str) -> Tuple[ValidPaths, str]:
         with open(path, "r") as file:
             input_dict = json.load(file)
         # validate keys
@@ -29,7 +29,7 @@ class InputValidator:
             return None
         dna_path = context_path / (patient_uuid + '_dna.txt')
         metadata_path = context_path / (patient_uuid + '_dna.json')
-        if not dna_path.exists() and metadata_path.exists():
+        if not dna_path.exists() or not metadata_path.exists():
             return None
         return ValidPaths(dna_path, metadata_path, Path(input_dict["results_path"])), patient_uuid
 

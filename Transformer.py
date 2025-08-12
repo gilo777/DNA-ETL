@@ -1,5 +1,8 @@
 from itertools import combinations
 
+import Levenshtein
+from Levenshtein import matching_blocks
+
 from DataModels.DnaData import DnaData
 
 
@@ -8,8 +11,8 @@ class Transformer:
     def __init__(self):
         self.codon_frequencies = {}
 
-    # Remove all related sensitive data
-    def remove_private_keys(self, meta_data):
+    # Remove all related sensitive data in a metadata dict :
+    def remove_private_keys(self, meta_data : dict) -> dict:
         cleaned_dict = {}
 
         for key, value in meta_data.items():
@@ -32,37 +35,44 @@ class Transformer:
     #
     # find the most common codon,
     # find the LCS
-    def transform_dna(self, dna_data) -> dict:
+    def transform_dna(self, dna_data : DnaData) -> dict:
         sequences_data = []
 
+        # analyze DNA sequences and put them in a dict :
         for sequence in dna_data.sequences:
-            analysis = self.analyze_sequence(sequence)
-            sequences_data.append(analysis)
+            analysis_result = self.analyze_sequence(sequence)
+            sequences_data.append(analysis_result)
 
-        sequences_dict = {"sequences": sequences_data}
-
+        # find the longest common subsequence :
         lcs_data = self.findLCS(dna_data)
 
-        most_common = None
+        # check if there are codons to check, and get the most frequent one :
+        most_common_codon = None
         if self.codon_frequencies:
-            most_common = max(self.codon_frequencies, key=self.codon_frequencies.get)
+            most_common_codon = max(self.codon_frequencies, key=self.codon_frequencies.get)
 
-        return {"sequences": sequences_dict, "most_common_codon": most_common,"lcs": lcs_data}
+        # return as a dict containing processed DNA as required :
+        return {"sequences": sequences_data, "most_common_codon": most_common_codon,"lcs": lcs_data}
 
 
-
-    def analyze_sequence(self, sequence):
+    # given a single DNA sequence, calculates the GC content, and the codons frequencies.
+    # keeps count of the codon frequencies in a "global" map to later calculate the most frequent codon
+    def analyze_sequence(self, sequence : str) -> dict:
+        # GC content calculation :
         gc_count = sequence.count('G') + sequence.count('C')
         gc_content = round((gc_count / len(sequence)) * 100, 2)
 
+        # as long as possible, check the codon, and move 3 characters to the right :
         codons = {}
         for i in range(0, len(sequence) - 2, 3):
             codon = sequence[i:i + 3]
             if len(codon) == 3:
+                # put in 'codons' - for dna data
                 if codon in codons:
                     codons[codon] += 1
                 else:
                     codons[codon] = 1
+                # put in 'codon frequencies' to later get the most frequent
                 if codon in self.codon_frequencies:
                     self.codon_frequencies[codon] += 1
                 else:
@@ -73,14 +83,20 @@ class Transformer:
             "codons": codons
         }
 
-    def findLCS(self, dna_data):
+    # finds the LCS out of all given DNA sequences :
+    def findLCS(self, dna_data : DnaData) -> dict:
+        # when there's a single sequence or no sequences - no LCS
         if len(dna_data.sequences) < 2:
             return {"value": "", "sequences": [], "length": 0}
 
         all_results = []
 
+        # for every pair possible from the DNA sequences,
+        # ***(possibly could be improved, skipping repeating checks or subsequences)
         for i, j in combinations(range(len(dna_data.sequences)), 2):
-            lcs_value = self.lcs_sequence(dna_data.sequences[i], dna_data.sequences[j])
+            # get the LCS of the current pair
+            lcs_value = self.longest_common_subsequence(dna_data.sequences[i], dna_data.sequences[j])
+            # if there is one, find all sequences cotaining it and save it.
             if lcs_value:
                 participants = [k for k in range(len(dna_data.sequences))
                                 if self.is_subsequence(lcs_value, dna_data.sequences[k])]
@@ -92,9 +108,10 @@ class Transformer:
                 })
         if not all_results:
             return {"value": "", "sequences": [], "length": 0}
+        # find the LCS of all - priority for length and then number of sequences containing it
+        return max(all_results, key = lambda x: (x["length"], len(x["sequences"])))
 
-        return max(all_results, key=lambda x: (x["length"], len(x["sequences"])))
-
+    # checks if subseq is a subsequence in seq :
     def is_subsequence(self, subseq, seq):
         i = j = 0
         while i < len(subseq) and j < len(seq):
@@ -103,28 +120,17 @@ class Transformer:
             j += 1
         return i == len(subseq)
 
-    def lcs_sequence(self, dna1, dna2):
-        m, n = len(dna1), len(dna2)
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if dna1[i - 1] == dna2[j - 1]:
-                    dp[i][j] = dp[i - 1][j - 1] + 1
-                else:
-                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
 
-        lcs = []
-        i, j = m, n
-        while i > 0 and j > 0:
-            if dna1[i - 1] == dna2[j - 1]:
-                lcs.append(dna1[i - 1])
-                i -= 1
-                j -= 1
-            elif dp[i - 1][j] > dp[i][j - 1]:
-                i -= 1
-            else:
-                j -= 1
-
-        lcs.reverse()
-        return "".join(lcs)
+    # Given two strings(DNA sequences) calculates and returns the longest common subsequence :
+    def longest_common_subsequence(self, seq1 : str, seq2: str) -> str:
+        # use Levenshtein to find all common blocks in the two strings
+        blocks = matching_blocks(Levenshtein.editops(seq1, seq2), seq1, seq2)
+        # get the longest one
+        max_block = max(blocks, key = lambda x : x.size)
+        # block[2] = block.size
+        if max_block[2] > 0:
+            # slice deq1 from the start of 'max_block' to the end to return the subsequence itself :
+            return seq1[max_block.a:max_block.a + max_block.size]
+        else:
+            return ""
 
