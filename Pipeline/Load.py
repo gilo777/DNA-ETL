@@ -1,8 +1,20 @@
 import json
 
-class Loader:
+class Load:
+    """
 
-    def load(self, meta_data, dna_data, paths, start_time, end_time, participant_id) -> None:
+    """
+    def create_output(self, meta_data, dna_data, paths, start_time, end_time, participant_id) -> None:
+        """
+
+        :param meta_data:
+        :param dna_data:
+        :param paths:
+        :param start_time:
+        :param end_time:
+        :param participant_id:
+        :return:
+        """
         output = {
             "metadata": {
                 "start_at": str(start_time),

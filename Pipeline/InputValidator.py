@@ -5,11 +5,22 @@ from typing import List, Tuple
 
 from Pipeline.DataModelsAndConstants.ValidPaths import ValidPaths
 class InputValidator:
+    """
 
+    """
     def __init__(self, valid_keys: List[str]):
+        """
+
+        :param valid_keys:
+        """
         self.valid_keys = valid_keys
 
     def validate(self, path : str) -> Tuple[ValidPaths, str]:
+        """
+
+        :param path:
+        :return:
+        """
         with open(path, "r") as file:
             input_dict = json.load(file)
 

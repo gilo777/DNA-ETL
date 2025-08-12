@@ -4,13 +4,20 @@ from Pipeline.DataModelsAndConstants.Constants import YEAR_RANGE_LOWER, YEAR_RAN
 
 
 class MetaDataValidator:
+    """
 
+    """
         # check values lengths
         # check participant age
         # check All other dates should be between [2014-2024]
 
     # given a participant metadata, check if it meets the conditions :
     def validate_metadata(self, metadata_dict : dict) -> bool:
+        """
+
+        :param metadata_dict:
+        :return:
+        """
         valid_metadata_value = True
         for metadata_key, metadata_value in metadata_dict.items():
             # recursive call
@@ -31,7 +38,11 @@ class MetaDataValidator:
     # given a value, check if it is a date- if it is, check it is in range
         # check value length is in range
     def _validate_string_value(self, value: str) -> bool:
+        """
 
+        :param value:
+        :return:
+        """
         if self._is_date_string(value):
             date = self._parse_date_string(value)
             if date:
@@ -45,6 +56,11 @@ class MetaDataValidator:
 
     # validate age.
     def _validate_birth_date_value(self, value) -> bool:
+        """
+
+        :param value:
+        :return:
+        """
         if isinstance(value, str) and self._is_date_string(value):
             birth_date = self._parse_date_string(value)
             if birth_date:
@@ -63,6 +79,12 @@ class MetaDataValidator:
 
     # given a string, check if it's a date
     def _is_date_string(self, value : str, date_formats=None) -> bool:
+        """
+
+        :param value:
+        :param date_formats:
+        :return:
+        """
         # Common date formats to try
         if date_formats is None:
             date_formats = VALID_DATE_FORMATS
@@ -77,7 +99,12 @@ class MetaDataValidator:
 
     # parse a string to a datetime for easy access to year, month etc.
     def _parse_date_string(self, value : str, date_formats=None) -> datetime:
-        """Parse a date string and return datetime object"""
+        """
+
+        :param value:
+        :param date_formats:
+        :return:
+        """
         if date_formats is None:
             date_formats = VALID_DATE_FORMATS
 
@@ -90,6 +117,11 @@ class MetaDataValidator:
 
     # calculate the age, given a birth date
     def _calculate_age(self, birth_date : datetime) -> int:
+        """
+
+        :param birth_date:
+        :return:
+        """
         today = datetime.now()
         return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 

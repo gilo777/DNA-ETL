@@ -30,11 +30,23 @@ def main():
 
 
 def process_single_file(orchestrator, file_path):
+    """
+
+    :param orchestrator:
+    :param file_path:
+    :return:
+    """
     result = orchestrator.orchestrate(file_path)
     print(f"✓ Successfully processed {file_path}: \n {result}")
     return True
 
 def process_directory(orchestrator, directory_path):
+    """
+
+    :param orchestrator:
+    :param directory_path:
+    :return:
+    """
     all_items = os.listdir(directory_path)
     json_files = [item for item in all_items
                   if item.lower().endswith('.json')]

@@ -1,21 +1,30 @@
 from datetime import datetime
 from Pipeline.DataModelsAndConstants.Constants import VALID_INPUT_KEYS
-from Pipeline.Extract.DataExtractor import DataExtractor
+from Pipeline.DataExtractor import DataExtractor
+from Pipeline.MetaDataValidator import MetaDataValidator
 from Pipeline.InputValidator import InputValidator
 from Pipeline.Transform.DNAProcessor import DNAProcessor
 from Pipeline.Transform.MetaDataProcessor import MetaDataProcessor
-from Pipeline.Loader import Loader
+from Pipeline.Load import Load
 
 class Orchestrator:
+    """
 
+    """
     def __init__(self):
         self.input_validator = InputValidator(valid_keys = VALID_INPUT_KEYS)
         self.data_extractor = DataExtractor()
         self.DNA_processor = DNAProcessor()
         self.MetaData_processor = MetaDataProcessor()
-        self.loader = Loader()
+        self.loader = Load()
+        self.metadata_validator = MetaDataValidator()
 
     def orchestrate(self, input_path : str) -> str:
+        """
+
+        :param input_path:
+        :return:
+        """
         # input path to json with two fields
         # 1. path to input folder with two files .json (metadata) .txt (dna data)
         # 2. path to output folder
@@ -42,17 +51,21 @@ class Orchestrator:
         start_time = datetime.now()
 
         ## data extraction
-        meta_data, dna_data = self.data_extractor.extract(verified_paths)
+        metadata, dna_data = self.data_extractor.extract(verified_paths)
+
+        if not self.metadata_validator.validate_metadata(metadata):
+            raise Exception("metadata file not valid")
+
 
         ## meta transformation
-        transformed_metadata = self.MetaData_processor.remove_private_keys(meta_data)
+        transformed_metadata = self.MetaData_processor.remove_private_keys(metadata)
 
         ## dna transformation
         transformed_dna = self.DNA_processor.transform_dna(dna_data)
 
         end_time = datetime.now()
 
-        output =  self.loader.load(transformed_metadata,transformed_dna, verified_paths, start_time, end_time, participant_id)
+        output =  self.loader.create_output(transformed_metadata, transformed_dna, verified_paths, start_time, end_time, participant_id)
         if(output is None):
             return f"pipline failed"
         else:
