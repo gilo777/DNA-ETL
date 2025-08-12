@@ -3,9 +3,7 @@ import uuid
 from pathlib import Path
 from typing import List, Tuple
 
-from Pipeline.DataModels_and_Constants.ValidPaths import ValidPaths
-
-
+from Pipeline.DataModelsAndConstants.ValidPaths import ValidPaths
 class InputValidator:
 
     def __init__(self, valid_keys: List[str]):

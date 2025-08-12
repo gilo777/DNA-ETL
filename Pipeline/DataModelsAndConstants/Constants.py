@@ -1,9 +1,11 @@
-ValidInputKeys = ["context_path","results_path"]
-min_age = 40
-max_value_len = 64
-year_range_lower = 2014
-year_range_upper = 2024
-valid_date_formats = [
+## Constants file contains values for constants used in the pipeline.
+
+VALID_INPUT_KEYS = ["context_path", "results_path"]
+MIN_AGE = 40
+MAX_VALUE_LEN = 64
+YEAR_RANGE_LOWER = 2014
+YEAR_RANGE_UPPER = 2024
+VALID_DATE_FORMATS = [
                 '%Y-%m-%d',  # 2024-01-15
                 '%d/%m/%Y',  # 15/01/2024
                 '%m/%d/%Y',  # 01/15/2024

@@ -1,9 +1,6 @@
-
 from datetime import datetime
-
-
-from Pipeline.DataModels_and_Constants.Constants import ValidInputKeys
-from Pipeline.Extract.Data_Extractor import Data_Extractor
+from Pipeline.DataModelsAndConstants.Constants import VALID_INPUT_KEYS
+from Pipeline.Extract.DataExtractor import DataExtractor
 from Pipeline.InputValidator import InputValidator
 from Pipeline.Transform.DNAProcessor import DNAProcessor
 from Pipeline.Transform.MetaDataProcessor import MetaDataProcessor
@@ -12,8 +9,8 @@ from Pipeline.Loader import Loader
 class Orchestrator:
 
     def __init__(self):
-        self.input_validator = InputValidator(valid_keys = ValidInputKeys)
-        self.data_extractor = Data_Extractor()
+        self.input_validator = InputValidator(valid_keys = VALID_INPUT_KEYS)
+        self.data_extractor = DataExtractor()
         self.DNA_processor = DNAProcessor()
         self.MetaData_processor = MetaDataProcessor()
         self.loader = Loader()
@@ -59,4 +56,4 @@ class Orchestrator:
         if(output is None):
             return f"pipline failed"
         else:
-            return output
+            return f"Participant ID: {participant_id}"

@@ -1,8 +1,6 @@
 import json
 
-
 class Loader:
-
 
     def load(self, meta_data, dna_data, paths, start_time, end_time, participant_id) -> None:
         output = {

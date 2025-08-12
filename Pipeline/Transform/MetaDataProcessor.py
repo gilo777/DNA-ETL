@@ -1,9 +1,7 @@
 class MetaDataProcessor:
 
-
     # Remove all related sensitive data in a metadata dict :
     def remove_private_keys(self, meta_data: dict) -> dict:
-
         cleaned_dict = {}
 
         for key, value in meta_data.items():

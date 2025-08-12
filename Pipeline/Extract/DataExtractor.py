@@ -1,12 +1,14 @@
 import json
 from typing import Tuple
 
-from Pipeline.DataModels_and_Constants import ValidPaths
-from Pipeline.DataModels_and_Constants.DnaData import DnaData
+from Pipeline.DataModelsAndConstants import ValidPaths
+from Pipeline.DataModelsAndConstants.DnaData import DnaData
 from Pipeline.Extract.MetaDataValidator import MetaDataValidator
 
 
-class Data_Extractor:
+class DataExtractor:
+
+
 
     def __init__(self):
          self.validator = MetaDataValidator()

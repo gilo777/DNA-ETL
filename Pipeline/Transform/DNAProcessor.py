@@ -3,7 +3,7 @@ from itertools import combinations
 import Levenshtein
 from Levenshtein import matching_blocks
 
-from Pipeline.DataModels_and_Constants.DnaData import DnaData
+from Pipeline.DataModelsAndConstants.DnaData import DnaData
 
 
 class DNAProcessor:
@@ -13,7 +13,7 @@ class DNAProcessor:
 
     # transforms the DNA sequences into a dict,
     # for each sequence:
-    #  1.claculate GC content
+    #  1.calculate GC content
     #  2.codons : frequencies
     #
     # find the most common codon,
@@ -23,11 +23,11 @@ class DNAProcessor:
 
         # analyze DNA sequences and put them in a dict :
         for sequence in dna_data.sequences:
-            analysis_result = self.analyze_sequence(sequence)
+            analysis_result = self._analyze_sequence(sequence)
             sequences_data.append(analysis_result)
 
         # find the longest common subsequence :
-        lcs_data = self.findLCS(dna_data)
+        lcs_data = self._find_lcs(dna_data)
 
         # check if there are codons to check, and get the most frequent one :
         most_common_codon = None
@@ -40,7 +40,7 @@ class DNAProcessor:
 
     # given a single DNA sequence, calculates the GC content, and the codons frequencies.
     # keeps count of the codon frequencies in a "global" map to later calculate the most frequent codon
-    def analyze_sequence(self, sequence : str) -> dict:
+    def _analyze_sequence(self, sequence : str) -> dict:
         # GC content calculation :
         gc_count = 0
         for nuc in sequence:
@@ -50,19 +50,12 @@ class DNAProcessor:
 
         # as long as possible, check the codon, and move 3 characters to the right :
         codons = {}
-        for i in range(0, len(sequence) - 2, 3):
+        for i in range(0, len(sequence) - (len(sequence) % 3) - 2, 3):
             codon = sequence[i:i + 3]
-            if len(codon) == 3:
-                # put in 'codons' - for dna data
-                if codon in codons:
-                    codons[codon] += 1
-                else:
-                    codons[codon] = 1
-                # put in 'codon frequencies' to later get the most frequent
-                if codon in self.codon_frequencies:
-                    self.codon_frequencies[codon] += 1
-                else:
-                    self.codon_frequencies[codon] = 1
+            # put in 'codons' - for dna data
+            codons[codon] = codons.get(codon, 0) + 1
+            # put in 'codon frequencies' to later get the most frequent
+            self.codon_frequencies[codon] = self.codon_frequencies.get(codon, 0) + 1
 
         return {
             "gc_content": gc_content,
@@ -70,7 +63,7 @@ class DNAProcessor:
         }
 
     # finds the LCS out of all given DNA sequences :
-    def findLCS(self, dna_data : DnaData) -> dict:
+    def _find_lcs(self, dna_data : DnaData) -> dict:
         # when there's a single sequence or no sequences - no LCS
         if len(dna_data.sequences) < 2:
             return {"value": "", "sequences": [], "length": 0}
@@ -81,12 +74,11 @@ class DNAProcessor:
         # ***(possibly could be improved, skipping repeating checks or subsequences)
         for i, j in combinations(range(len(dna_data.sequences)), 2):
             # get the LCS of the current pair
-            lcs_value = self.longest_common_subsequence(dna_data.sequences[i], dna_data.sequences[j])
+            lcs_value = self._longest_common_subsequence(dna_data.sequences[i], dna_data.sequences[j])
             # if there is one, find all sequences cotaining it and save it.
             if lcs_value:
                 participants = [k + 1 for k in range(len(dna_data.sequences))
                                 if lcs_value in dna_data.sequences[k]]
-                # participants = [i + 1, j + 1]
 
                 all_results.append({
                     "value": lcs_value,
@@ -98,18 +90,10 @@ class DNAProcessor:
         # find the LCS of all - priority for length and then number of sequences containing it
         return max(all_results, key = lambda x: (x["length"], len(x["sequences"])))
 
-    # checks if subseq is a subsequence in seq :
-    def is_subsequence(self, subseq, seq):
-        i = j = 0
-        while i < len(subseq) and j < len(seq):
-            if subseq[i] == seq[j]:
-                i += 1
-            j += 1
-        return i == len(subseq)
 
 
     # Given two strings(DNA sequences) calculates and returns the longest common subsequence :
-    def longest_common_subsequence(self, seq1 : str, seq2: str) -> str:
+    def _longest_common_subsequence(self, seq1 : str, seq2: str) -> str:
         # use Levenshtein to find all common blocks in the two strings
         blocks = matching_blocks(Levenshtein.editops(seq1, seq2), seq1, seq2)
         # get the longest one
