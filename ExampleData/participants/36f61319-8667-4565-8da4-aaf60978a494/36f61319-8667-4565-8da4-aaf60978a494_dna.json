@@ -1,0 +1,55 @@
+{
+    "test_metadata": {
+        "test_id": "GEN345",
+        "test_type": "Genetic Profiling",
+        "date_requested": "2024-03-01",
+        "date_completed": "2024-03-05",
+        "status": "Completed",
+        "laboratory_info": {
+            "name": "HealthGene Labs",
+            "certification": "CLIA Certified"
+        }
+    },
+    "sample_metadata": {
+        "sample_id": "SAMP123",
+        "sample_type": "Saliva",
+        "collection_date": "2024-03-01",
+        "data_file": "./data/participants/36f61319-8667-4565-8da4-aaf60978a494"
+    },
+    "analysis_metadata": {
+        "platform": "Illumina NextSeq",
+        "methodology": "Whole Genome Sequencing",
+        "coverage": "30x",
+        "reference_genome": "GRCh38",
+        "variants_detected": {
+            "total": 4000,
+            "pathogenic": 12,
+            "likely_pathogenic": 6,
+            "benign": 3982
+        }
+    },
+    "individual_metadata": {
+        "_individual_id": "IND456",
+        "_name": "David Smith",
+        "date_of_birth": "1933-05-10",
+        "gender": "Male",
+        "ethnicity": "Caucasian"
+    },
+    "treatment_metadata": {
+        "treatment_plan": "Ongoing management of heart disease and blood pressure",
+        "start_date": "2024-01-15",
+        "current_medications": [
+            {
+                "name": "Amlodipine",
+                "dose": "5 mg daily"
+            }
+        ],
+        "doctor": "Dr. Jane Carter"
+    },
+    "environmental_factors": {
+        "smoking_history": "Non-smoker",
+        "exercise": "Daily walking and stretching, 20 minutes",
+        "diet": "Low salt, high fiber diet",
+        "sleep": "7-8 hours of sleep nightly"
+    }
+}

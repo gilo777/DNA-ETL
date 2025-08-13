@@ -1,54 +1,34 @@
-from Exceptions.ValidateExceptions import InputFileDoesNotExist
+from typing import Tuple
+from Exceptions.LoadExceptions import LoadException
+from Exceptions.ValidateExceptions import InputFileDoesNotExist, DataFileDoesNotExist, InvalidInputKeys, InvalidUUID, \
+    ContextPathDoesNotExist, InvalidDateParsingFormat, DateOutOfRange, InvalidBirthDate, InvalidParticipantAge, \
+    InvalidValueLength
+
+
 class StatusCodeExceptionTranslator:
-## think about ENUMS
-## fix the euality check of exceptions
-    def translate_custom_exceptions(e: Exception) -> int:
-        match e:
-            case 'InputFileDoesNotExist':
-                return 1, e.message ## to save the information
-            case 'InvalidInputKeys':
-                return 2
-            case 'InvalidUUID':
-                return 3
-            case 'ContextPathDoesNotExist':
-                return 4
-            case 'DataFileDoesNotExist':
-                return 5
-            case 'DateOutOfRange':
-                return 6
-            case 'InvalidDateParsingFormat':
-                return 7
-            case 'InvalidBirthDate':
-                return 8
-            case 'InvalidParticipantAge':
-                return 9
-            case 'LoadException':
-                return 10
+    """
+    This class provides a centralized mechanism for converting custom exceptions raised
+    throughout the ETL pipeline into consistent status codes and human-readable error messages.
+    It recognizes all custom exceptions defined in the application and provides fallback
+    handling for unknown exceptions.
+    """
+    def translate_custom_exceptions(self, e: Exception) -> Tuple[int, str]:
+        """
+         This method checks if the provided exception is one of the recognized custom
+        exceptions defined in the application. For recognized exceptions, it extracts
+        the formatted error message using str(e). For unknown exceptions, it provides
+        a generic error message while preserving the original exception information.
 
-    def translate_custom_code(code : int) -> str:
-        match code:
-            case 1:
-                return 'InputFileDoesNotExist'
-            case 2:
-                return 'InvalidInputKeys'
-            case 3:
-                return 'InvalidUUID'
-            case 4:
-                return 'ContextPathDoesNotExist'
-            case 5:
-                return 'DataFileDoesNotExist'
-            case 6:
-                return 'DateOutOfRange'
-            case 7:
-                return 'InvalidDateParsingFormat'
-            case 8:
-                return 'InvalidBirthDate'
-            case 9:
-                return 'InvalidParticipantAge'
-            case 10:
-                return 'LoadException'
-
-
-
-
-
+        :param e: The exception instance to be translated.
+        :return: A tuple containing the status code and error message:
+                - status_code (int): Currently returns 1 for all exceptions (both recognized and unknown)
+                - message (str): For recognized exceptions, returns the formatted message from str(e).
+                               For unknown exceptions, returns "Unknown exception: <exception_details>"
+        """
+        valid_exceptions = [InputFileDoesNotExist, InvalidInputKeys, InvalidUUID, ContextPathDoesNotExist,
+                            DataFileDoesNotExist, DateOutOfRange, InvalidDateParsingFormat,
+                            InvalidBirthDate, InvalidParticipantAge,InvalidValueLength, LoadException]
+        if type(e) in valid_exceptions:
+            return 1, str(e)
+        else:
+            return 1, f"Unknown exception: {e}"

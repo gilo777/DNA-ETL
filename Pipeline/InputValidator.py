@@ -3,7 +3,7 @@ import uuid
 from pathlib import Path
 from typing import List, Tuple
 
-from Exceptions.ValidateExceptions import InputFileDoesNotExist, InvalidInputKeys, InvalidqUUID, InvalidUUID, \
+from Exceptions.ValidateExceptions import InputFileDoesNotExist, InvalidInputKeys, InvalidUUID, InvalidUUID, \
     ContextPathDoesNotExist
 from Pipeline.DataModels.ValidPaths import ValidPaths
 class InputValidator:

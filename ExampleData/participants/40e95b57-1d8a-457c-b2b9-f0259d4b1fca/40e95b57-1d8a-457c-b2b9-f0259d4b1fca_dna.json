@@ -1,0 +1,64 @@
+{
+    "test_metadata": {
+        "test_id": "GEN456",
+        "test_type": "Genetic Test",
+        "date_requested": "2013-06-15",
+        "date_completed": "2024-02-03",
+        "status": "Completed",
+        "laboratory_info": {
+            "name": "HealthGen Labs",
+            "certification": "CLIA"
+        }
+    },
+    "sample_metadata": {
+        "sample_id": "SAMP654",
+        "sample_type": "Blood",
+        "collection_date": "2024-01-20",
+        "data_file": "./data/participants/40e95b57-1d8a-457c-b2b9-f0259d4b1fca"
+    },
+    "analysis_metadata": {
+        "platform": "Illumina",
+        "methodology": "Whole Genome Sequencing",
+        "coverage": "40x",
+        "reference_genome": "GRCh38",
+        "variants_detected": {
+            "total": 3500,
+            "pathogenic": 10,
+            "likely_pathogenic": 5,
+            "benign": 3485
+        }
+    },
+    "individual_metadata": {
+        "_individual_id": "IND789",
+        "_name": "Michael Brown",
+        "date_of_birth": "1982-05-14",
+        "gender": "Male",
+        "ethnicity": "Caucasian"
+    },
+    "treatment_metadata": {
+        "treatment_plan": "Blood pressure and cholesterol management",
+        "start_date": "2024-01-10",
+        "current_medications": [
+            {
+                "name": "Amlodipine",
+                "dose": "5 mg daily"
+            },
+            {
+                "name": "Atorvastatin",
+                "dose": "10 mg daily"
+            }
+        ],
+        "doctor": "Dr. Roberts"
+    },
+    "environmental_factors": {
+        "smoking_history": "Ex-smoker, quit at 30",
+        "exercise": "Jogging 3 times a week",
+        "diet": "Low-fat, high-fiber",
+        "sleep": "7 hours nightly"
+    },
+    "biomarker_data": {
+        "blood_pressure": "125/80 mmHg",
+        "cholesterol": "200 mg/dL",
+        "blood_sugar": "95 mg/dL"
+    }
+}

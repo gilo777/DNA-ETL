@@ -21,13 +21,16 @@ def main():
         success = process_directory(orchestrator, args.config_path)
         sys.exit(0 if success else 1)
     else:
-        print(f"Error: '{args.config_path}' is neither a regular file nor a directory.")
+        print(f"\n ✗ Error: '{args.config_path}' is neither a regular file nor a directory.")
         sys.exit(1)
 
 
 def process_single_file(orchestrator, file_path):
     result = orchestrator.orchestrate(file_path)
-    print(f"✓ Successfully processed {file_path}: \n {result}")
+    if result[0] == 0:
+        print(f"\n ✓ Successfully processed {file_path}: \n {result[1]}")
+    elif result[0] == 1:
+        print(f"\n ✗ Failed to process {file_path}: \n {result[1]}")
     return True
 
 def process_directory(orchestrator, directory_path):
@@ -35,7 +38,7 @@ def process_directory(orchestrator, directory_path):
     json_files = [item for item in all_items
                   if item.lower().endswith('.json')]
     if not json_files:
-        print(f"No JSON files found in directory '{directory_path}'")
+        print(f"\n ✗ No JSON files found in directory '{directory_path}'")
         return False
     successful_count = 0
     total_count = len(json_files)

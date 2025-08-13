@@ -1,0 +1,65 @@
+{
+    "test_metadata": {
+        "test_id": "GEN102",
+        "test_type": "Genetic Testing",
+        "date_requested": "2024-01-10",
+        "date_completed": "2024-01-12",
+        "status": "Completed",
+        "laboratory_info": {
+            "name": "Genetic Labs Inc.",
+            "certification": "CLIA Certified"
+        }
+    },
+    "sample_metadata": {
+        "sample_id": "SAMP786",
+        "sample_type": "Saliva",
+        "collection_date": "2024-01-10",
+        "data_file": "./data/participants/f1c05171-1c1d-418b-ba2c-faf15de050a4"
+    },
+    "analysis_metadata": {
+        "platform": "Illumina NovaSeq 6000",
+        "methodology": "Whole Genome Sequencing",
+        "coverage": "30x",
+        "reference_genome": "GRCh38",
+        "variants_detected": {
+            "total": 3200,
+            "pathogenic": 8,
+            "likely_pathogenic": 4,
+            "benign": 3188
+        }
+    },
+    "individual_metadata": {
+        "_individual_id": "IND5678",
+        "_name": "Sophia Davis",
+        "date_of_birth": "1990-11-20",
+        "gender": "Female",
+        "ethnicity": "Caucasian"
+    },
+    "treatment_metadata": {
+        "treatment_plan": "Manage cholesterol and blood sugar levels with medication and lifestyle changes",
+        "start_date": "2024-01-05",
+        "current_medications": [
+            {
+                "name": "Atorvastatin",
+                "dose": "20 mg daily"
+            },
+            {
+                "name": "Metformin",
+                "dose": "500 mg twice daily"
+            }
+        ],
+        "doctor": "Dr. Williams"
+    },
+    "environmental_factors": {
+        "smoking_history": "Non-smoker",
+        "exercise": "Regular walking and light cardio exercises",
+        "diet": "High-protein, low-carb with balanced vegetables and fruits",
+        "sleep": "7-8 hours of sleep each night, no interruptions"
+    },
+    "biomarker_data": {
+        "blood_pressure": "120/75 mmHg",
+        "cholesterol": "180 mg/dL",
+        "blood_sugar": "90 mg/dL",
+        "eGFR": "95 mL/min/1.73m\u00b2"
+    }
+}

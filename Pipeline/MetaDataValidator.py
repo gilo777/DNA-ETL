@@ -1,6 +1,6 @@
 from datetime import datetime
 from Constants import YEAR_RANGE_LOWER, YEAR_RANGE_UPPER, MAX_VALUE_LEN, MIN_AGE, VALID_DATE_FORMATS
-from Exceptions.ValidateExceptions import DateOutOfRange, InvalidDateFormat, InvalidDateParsingFormat, InvalidBirthDate, \
+from Exceptions.ValidateExceptions import DateOutOfRange, InvalidDateParsingFormat, InvalidBirthDate, \
     InvalidParticipantAge
 
 
@@ -24,25 +24,23 @@ class MetaDataValidator:
         for metadata_key, metadata_value in metadata_dict.items():
             # Recursive call, if the value is a dictionary
             if isinstance(metadata_value, dict):
-                valid_metadata_value = valid_metadata_value and self.validate_metadata(metadata_value)
+                self.validate_metadata(metadata_value)
             else:
                 try:
                     # Age validation
                     if metadata_key == 'date_of_birth':
-                        valid_metadata_value = valid_metadata_value and self._validate_birth_date_value(metadata_value)
+                        self._validate_birth_date_value(metadata_value)
                     # Value validation
                     elif isinstance(metadata_value, str):
-                        valid_metadata_value = valid_metadata_value and self._validate_string_value(metadata_value)
+                        self._validate_string_value(metadata_value)
                 except Exception as e:
                     raise e
 
-    def _validate_string_value(self, value: str) -> bool:
+    def _validate_string_value(self, value: str) -> None:
         """
         Validates string values for date format and length constraints.
 
         :param value: String value to validate
-        :return:
-            bool: True if string passes all validation checks, False otherwise
         """
         # In case of a date, validate range
         if self._is_date_string(value):
@@ -53,23 +51,21 @@ class MetaDataValidator:
             else:
                 raise InvalidDateParsingFormat(value)
         # Value length validation
-        return len(value) <= MAX_VALUE_LEN
+        if len(value) > MAX_VALUE_LEN:
+            raise InvalidParticipantAge(value)
 
-    def _validate_birth_date_value(self, value) -> bool:
+    def _validate_birth_date_value(self, value) -> None:
         """
         Validates birth date values and ensures minimum age requirements are met.
 
         :param value: Birth date value to validate (expected to be a string)
-        :return:
-            bool: True if birth date is valid and meets minimum age, False otherwise
         """
         if isinstance(value, str) and self._is_date_string(value):
             birth_date = self._parse_date_string(value)
             age = self._calculate_age(birth_date)
             if birth_date:
-                return age >= MIN_AGE
-            else:
-                raise InvalidParticipantAge(age)
+                if age < MIN_AGE:
+                    raise InvalidParticipantAge(age)
         else:
             raise InvalidBirthDate(value)
 

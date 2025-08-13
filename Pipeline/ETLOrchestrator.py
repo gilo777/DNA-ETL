@@ -1,6 +1,7 @@
 from datetime import datetime
+from typing import Tuple
 from Constants import VALID_INPUT_KEYS
-from Exceptions.StatusCodeTranslator import translate_custom_exceptions
+from Exceptions.StatusCodeTranslator import StatusCodeExceptionTranslator
 from Pipeline.DataExtractor import DataExtractor
 from Pipeline.MetaDataValidator import MetaDataValidator
 from Pipeline.InputValidator import InputValidator
@@ -35,8 +36,9 @@ class ETLOrchestrator:
         self.MetaData_processor = MetaDataProcessor()
         self.loader = Loader()
         self.metadata_validator = MetaDataValidator()
+        self.exception_translator = StatusCodeExceptionTranslator()
 
-    def orchestrate(self, input_path : str) -> int:
+    def orchestrate(self, input_path : str) -> Tuple[int, str]:
         """
         The orchestrate method executes a complete genetic data processing pipeline that validates,
         extracts, transforms, and outputs DNA sequence data and metadata
@@ -45,8 +47,8 @@ class ETLOrchestrator:
         :param input_path(str): Path to the input directory containing paths to the input data files and output file.
 
         :return:
-            str: Success message containing the participant ID if processing
-                succeeds, or failure message if pipeline encounters errors
+            Tuple[int, str]: - status code 0, success message containing the participant ID if processing
+                             - status code 1, error message if pipeline encounters errors
         """
         # Validate input.
         try:
@@ -67,8 +69,13 @@ class ETLOrchestrator:
             # Capture time when finished processing.
             end_time = datetime.now()
             # Generate output file, return participant ID for documentation.
-            self.loader.create_output(transformed_metadata, transformed_dna, verified_paths, start_time, end_time, participant_id)
+            self.loader.create_output(transformed_metadata,
+                                      transformed_dna,
+                                      verified_paths,
+                                      start_time,
+                                      end_time,
+                                      participant_id)
         except Exception as e:
-            return translate_custom_exceptions(e)
-        return 0
+            return self.exception_translator.translate_custom_exceptions(e)
+        return 0, f"Pipline completed for participant ID: {participant_id}"
 
