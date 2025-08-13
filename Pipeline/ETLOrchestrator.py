@@ -5,7 +5,7 @@ from Pipeline.MetaDataValidator import MetaDataValidator
 from Pipeline.InputValidator import InputValidator
 from Pipeline.Transform.DNAProcessor import DNAProcessor
 from Pipeline.Transform.MetaDataProcessor import MetaDataProcessor
-from Pipeline.Load import Load
+from Pipeline.Loader import Loader
 
 class ETLOrchestrator:
     """
@@ -20,7 +20,7 @@ class ETLOrchestrator:
         data_extractor (DataExtractor): Extracts data from validated input files
         DNA_processor (DNAProcessor): Transforms and processes DNA sequence data
         MetaData_processor (MetaDataProcessor): Processes and sanitizes metadata
-        loader (Load): Handles output file generation and data persistence
+        loader (Loader): Handles output file generation and data persistence
         metadata_validator (MetaDataValidator): Validates metadata content.
 
     Methods:
@@ -32,7 +32,7 @@ class ETLOrchestrator:
         self.data_extractor = DataExtractor()
         self.DNA_processor = DNAProcessor()
         self.MetaData_processor = MetaDataProcessor()
-        self.loader = Load()
+        self.loader = Loader()
         self.metadata_validator = MetaDataValidator()
 
     def orchestrate(self, input_path : str) -> str:

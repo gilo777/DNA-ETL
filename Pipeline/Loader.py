@@ -3,7 +3,7 @@ import json
 from Pipeline.DataModels.ValidPaths import ValidPaths
 
 
-class Load:
+class Loader:
     """
     Responsible for formatting processed DNA data and metadata into a structured
     output format and saving it as a JSON file with processing metadata included.
