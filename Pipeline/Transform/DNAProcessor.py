@@ -3,7 +3,7 @@ from itertools import combinations
 import Levenshtein
 from Levenshtein import matching_blocks
 
-from Pipeline.DataModelsAndConstants.DNAData import DNAData
+from Pipeline.DataModels.DNAData import DNAData
 
 
 class DNAProcessor:
@@ -126,14 +126,12 @@ class DNAProcessor:
         :param seq2: Second DNA sequence string
         :return: Longest common subsequence string, or empty string if none exists
         """
-
-        # use Levenshtein to find all common blocks in the two strings
+        # Use Levenshtein to find all common blocks in the two strings
         blocks = matching_blocks(Levenshtein.editops(seq1, seq2), seq1, seq2)
-        # get the longest one
+        # Get the longest one
         max_block = max(blocks, key = lambda x : x.size)
-        # block[2] = block.size
+        # Slice seq1 from the start of 'max_block' to the end to return the subsequence itself, or "" if there is no common subsequence
         if max_block[2] > 0:
-            # slice deq1 from the start of 'max_block' to the end to return the subsequence itself :
             return seq1[max_block.a:max_block.a + max_block.size]
         else:
             return ""

@@ -1,8 +1,8 @@
 import json
 from typing import Tuple
 
-from Pipeline.DataModelsAndConstants import ValidPaths
-from Pipeline.DataModelsAndConstants.DNAData import DNAData
+from Pipeline.DataModels import ValidPaths
+from Pipeline.DataModels.DNAData import DNAData
 
 class DataExtractor:
     """

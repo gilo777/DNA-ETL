@@ -1,7 +1,7 @@
 import argparse
 import os
 import sys
-from Pipeline.Orchestrator import Orchestrator
+from Pipeline.ETLOrchestrator import ETLOrchestrator
 
 def main():
     parser = argparse.ArgumentParser(
@@ -17,7 +17,7 @@ def main():
         print(f"Error: Configuration file '{args.config_path}' not found.")
         sys.exit(1)  # Exit with error code 1 to indicate failure
 
-    orchestrator = Orchestrator()
+    orchestrator = ETLOrchestrator()
     if os.path.isfile(args.config_path):
         success = process_single_file(orchestrator, args.config_path)
         sys.exit(0 if success else 1)
@@ -30,23 +30,11 @@ def main():
 
 
 def process_single_file(orchestrator, file_path):
-    """
-
-    :param orchestrator:
-    :param file_path:
-    :return:
-    """
     result = orchestrator.orchestrate(file_path)
     print(f"✓ Successfully processed {file_path}: \n {result}")
     return True
 
 def process_directory(orchestrator, directory_path):
-    """
-
-    :param orchestrator:
-    :param directory_path:
-    :return:
-    """
     all_items = os.listdir(directory_path)
     json_files = [item for item in all_items
                   if item.lower().endswith('.json')]
