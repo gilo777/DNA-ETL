@@ -12,10 +12,6 @@ def main():
         help='Path to the JSON configuration file for the pipeline'
     )
     args = parser.parse_args()
-    # Basic file existence check
-    if not os.path.exists(args.config_path):
-        print(f"Error: Configuration file '{args.config_path}' not found.")
-        sys.exit(1)  # Exit with error code 1 to indicate failure
 
     orchestrator = ETLOrchestrator()
     if os.path.isfile(args.config_path):

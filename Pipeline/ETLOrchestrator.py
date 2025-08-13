@@ -1,5 +1,6 @@
 from datetime import datetime
 from Constants import VALID_INPUT_KEYS
+from Exceptions.StatusCodeTranslator import translate_custom_exceptions
 from Pipeline.DataExtractor import DataExtractor
 from Pipeline.MetaDataValidator import MetaDataValidator
 from Pipeline.InputValidator import InputValidator
@@ -35,7 +36,7 @@ class ETLOrchestrator:
         self.loader = Loader()
         self.metadata_validator = MetaDataValidator()
 
-    def orchestrate(self, input_path : str) -> str:
+    def orchestrate(self, input_path : str) -> int:
         """
         The orchestrate method executes a complete genetic data processing pipeline that validates,
         extracts, transforms, and outputs DNA sequence data and metadata
@@ -48,26 +49,26 @@ class ETLOrchestrator:
                 succeeds, or failure message if pipeline encounters errors
         """
         # Validate input.
-        validation_result = self.input_validator.validate(input_path)
-        if validation_result is None:
-            raise Exception(f"Input validation failed for path: {input_path}")
-        verified_paths, participant_id = validation_result
-        # Capture time when started processing
-        start_time = datetime.now()
-        # Extract data
-        metadata, dna_data = self.data_extractor.extract(verified_paths)
-        # Validate metadata.
-        if not self.metadata_validator.validate_metadata(metadata):
-            raise Exception("metadata file not valid")
-        # Metadata transformation
-        transformed_metadata = self.MetaData_processor.remove_private_keys(metadata)
-        # DNA data transformation
-        transformed_dna = self.DNA_processor.transform_dna(dna_data)
-        # Capture time when finished processing.
-        end_time = datetime.now()
-        # Generate output file, return participant ID for documentation.
-        output =  self.loader.create_output(transformed_metadata, transformed_dna, verified_paths, start_time, end_time, participant_id)
-        if(output is None):
-            return f"pipline failed"
-        else:
-            return f"Participant ID: {participant_id}"
+        try:
+            validation_result = self.input_validator.validate(input_path)
+            if validation_result is None:
+                raise Exception(f"Input validation failed for path: {input_path}")
+            verified_paths, participant_id = validation_result
+            # Capture time when started processing
+            start_time = datetime.now()
+            # Extract data
+            metadata, dna_data = self.data_extractor.extract(verified_paths)
+            # Validate metadata.
+            self.metadata_validator.validate_metadata(metadata)
+            # Metadata transformation
+            transformed_metadata = self.MetaData_processor.remove_private_keys(metadata)
+            # DNA data transformation
+            transformed_dna = self.DNA_processor.transform_dna(dna_data)
+            # Capture time when finished processing.
+            end_time = datetime.now()
+            # Generate output file, return participant ID for documentation.
+            self.loader.create_output(transformed_metadata, transformed_dna, verified_paths, start_time, end_time, participant_id)
+        except Exception as e:
+            return translate_custom_exceptions(e)
+        return 0
+

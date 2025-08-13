@@ -1,5 +1,6 @@
 import json
 
+from Exceptions.LoadExceptions import LoadException
 from Pipeline.DataModels.ValidPaths import ValidPaths
 
 
@@ -23,8 +24,6 @@ class Loader:
         :param start_time: Timestamp when processing began
         :param end_time: Timestamp when processing completed
         :param participant_id: Unique identifier for the participant
-        :return:
-            dict: The complete output dictionary if save succeeds, None if save fails
 
         Side Effects:
             - Creates/overwrites file at paths.output_path
@@ -51,7 +50,5 @@ class Loader:
             with open(paths.output_path, 'w+') as f:
                 json.dump(output, f, indent = 4)
             print(f"Output saved successfully to: {paths.output_path}")
-            return output
         except Exception as e:
-            print(f"Error saving output: {e}")
-            return None
+            raise LoadException(participant_id)

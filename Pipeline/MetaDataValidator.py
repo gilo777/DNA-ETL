@@ -1,5 +1,8 @@
 from datetime import datetime
 from Constants import YEAR_RANGE_LOWER, YEAR_RANGE_UPPER, MAX_VALUE_LEN, MIN_AGE, VALID_DATE_FORMATS
+from Exceptions.ValidateExceptions import DateOutOfRange, InvalidDateFormat, InvalidDateParsingFormat, InvalidBirthDate, \
+    InvalidParticipantAge
+
 
 class MetaDataValidator:
     """
@@ -7,7 +10,7 @@ class MetaDataValidator:
     string length limits, and year range constraints. Supports recursive
     validation for nested dictionary structures.
     """
-    def validate_metadata(self, metadata_dict : dict) -> bool:
+    def validate_metadata(self, metadata_dict : dict) -> None:
         """
         Recursively validates all key-value pairs in a metadata dictionary.
 
@@ -16,27 +19,22 @@ class MetaDataValidator:
         and comprehensive string validation for all other fields.
 
         :param metadata_dict: Dictionary containing metadata to validate
-        :return:
-            bool: True if all metadata values pass validation, False otherwise
         """
         # Iterate over all items in the given dictionary
-        valid_metadata_value = True
         for metadata_key, metadata_value in metadata_dict.items():
             # Recursive call, if the value is a dictionary
             if isinstance(metadata_value, dict):
                 valid_metadata_value = valid_metadata_value and self.validate_metadata(metadata_value)
             else:
-                # Age validation
-                if metadata_key == 'date_of_birth':
-                    valid_metadata_value = valid_metadata_value and self._validate_birth_date_value(metadata_value)
-                # Value validation
-                elif isinstance(metadata_value, str):
-                    valid_metadata_value = valid_metadata_value and self._validate_string_value(metadata_value)
-
-            if not valid_metadata_value:
-                return False
-
-        return valid_metadata_value
+                try:
+                    # Age validation
+                    if metadata_key == 'date_of_birth':
+                        valid_metadata_value = valid_metadata_value and self._validate_birth_date_value(metadata_value)
+                    # Value validation
+                    elif isinstance(metadata_value, str):
+                        valid_metadata_value = valid_metadata_value and self._validate_string_value(metadata_value)
+                except Exception as e:
+                    raise e
 
     def _validate_string_value(self, value: str) -> bool:
         """
@@ -51,9 +49,9 @@ class MetaDataValidator:
             date = self._parse_date_string(value)
             if date:
                 if not YEAR_RANGE_LOWER <= date.year <= YEAR_RANGE_UPPER:
-                    return False
+                    raise DateOutOfRange(date)
             else:
-                return False
+                raise InvalidDateParsingFormat(value)
         # Value length validation
         return len(value) <= MAX_VALUE_LEN
 
@@ -67,13 +65,13 @@ class MetaDataValidator:
         """
         if isinstance(value, str) and self._is_date_string(value):
             birth_date = self._parse_date_string(value)
+            age = self._calculate_age(birth_date)
             if birth_date:
-                age = self._calculate_age(birth_date)
                 return age >= MIN_AGE
             else:
-                return False
+                raise InvalidParticipantAge(age)
         else:
-            return False
+            raise InvalidBirthDate(value)
 
     def _is_date_string(self, value : str, date_formats=None) -> bool:
         """

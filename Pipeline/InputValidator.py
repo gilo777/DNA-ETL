@@ -3,6 +3,8 @@ import uuid
 from pathlib import Path
 from typing import List, Tuple
 
+from Exceptions.ValidateExceptions import InputFileDoesNotExist, InvalidInputKeys, InvalidqUUID, InvalidUUID, \
+    ContextPathDoesNotExist
 from Pipeline.DataModels.ValidPaths import ValidPaths
 class InputValidator:
     """
@@ -30,14 +32,16 @@ class InputValidator:
             Tuple[ValidPaths, str]: A tuple containing:
                 - ValidPaths object with verified file paths
                 - Patient UUID string extracted from the context path
-            Returns None if validation fails at any step
         """
         # Load Json into a dictionary.
-        with open(path, "r") as file:
-            input_dict = json.load(file)
+        try:
+            with open(path, "r") as file:
+                input_dict = json.load(file)
+        except FileNotFoundError:
+            raise InputFileDoesNotExist(path)
         # Validate keys in the dictionary are as required.
         if set(self.valid_keys) != set(input_dict.keys()):
-            raise Exception(f"File {path} contains illegal keys")
+            raise InvalidInputKeys(path)
         # Load context path and patient UUID
         context_path = Path(input_dict["context_path"])
         patient_uuid = str(context_path.name)
@@ -45,15 +49,15 @@ class InputValidator:
         try:
             uuid.UUID(patient_uuid)
         except ValueError:
-            return None
+            raise InvalidUUID(patient_uuid)
         # Validate context path exists.
         if not context_path.exists():
-            return None
+            raise ContextPathDoesNotExist(context_path)
         # Validate paths inside the patient directory.
         dna_path = context_path / (patient_uuid + '_dna.txt')
         metadata_path = context_path / (patient_uuid + '_dna.json')
         if not dna_path.exists() or not metadata_path.exists():
-            return None
+            raise InputFileDoesNotExist(context_path)
 
         return ValidPaths(dna_path, metadata_path, context_path, Path(input_dict["results_path"])), patient_uuid
 
