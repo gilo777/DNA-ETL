@@ -1,6 +1,6 @@
 import json
 
-from Exceptions.LoadExceptions import LoadException
+from Exceptions.LoaderExceptions import LoaderException
 from Pipeline.DataModels.ValidPaths import ValidPaths
 
 
@@ -51,4 +51,4 @@ class Loader:
                 json.dump(output, f, indent = 4)
             print(f"Output saved successfully to: {paths.output_path}")
         except Exception as e:
-            raise LoadException(participant_id)
+            raise LoaderException(participant_id)

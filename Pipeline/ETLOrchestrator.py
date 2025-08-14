@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Tuple
-from Constants import VALID_INPUT_KEYS
+from Constants import VALID_INPUT_KEYS, valid_exceptions
 from Exceptions.StatusCodeTranslator import StatusCodeExceptionTranslator
 from Pipeline.DataExtractor import DataExtractor
 from Pipeline.MetaDataValidator import MetaDataValidator
@@ -36,7 +36,7 @@ class ETLOrchestrator:
         self.MetaData_processor = MetaDataProcessor()
         self.loader = Loader()
         self.metadata_validator = MetaDataValidator()
-        self.exception_translator = StatusCodeExceptionTranslator()
+        self.exception_translator = StatusCodeExceptionTranslator(valid_exceptions)
 
     def orchestrate(self, input_path : str) -> Tuple[int, str]:
         """

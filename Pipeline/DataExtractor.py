@@ -38,6 +38,8 @@ class DataExtractor:
         """
         Extract metadata from a JSON file.
 
+        ** Assume the file path exists
+
         :param metadata_path: Path to the JSON metadata file
         :return: Parsed metadata as a dictionary
         """
@@ -49,12 +51,14 @@ class DataExtractor:
         """
         Extract DNA sequences from a text file.
 
+        ** Assume the file path exists.
+
         :param dna_file_path: Path to the text file containing DNA sequences
         :return: DNAData object containing the parsed DNA sequences
         """
         dna_data = DNAData()
         with open(dna_file_path, "r") as dna_file:
             for line in dna_file.readlines():
-                if line != "":
+                if line.strip() != "":
                     dna_data.sequences.append(line.strip())
         return dna_data

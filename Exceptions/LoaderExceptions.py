@@ -1,5 +1,5 @@
 
-class LoadException(Exception):
+class LoaderException(Exception):
     """Raised when data loading/output generation fails for a specific participant"""
     def __init__(self, participant_id):
         self.participant_id = participant_id
