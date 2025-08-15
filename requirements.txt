@@ -1,0 +1,9 @@
+# DNA-ETL Pipeline Dependencies
+
+# Core dependencies
+python-Levenshtein>=0.20.0
+
+# Testing dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.0.0

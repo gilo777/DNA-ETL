@@ -1,0 +1,18 @@
+{
+    "participant_id": "12ba71a0-30f4-464e-ba1b-9a31ea7d35fc",
+    "name": "Test Participant",
+    "date_of_birth": "1980-05-15",
+    "age": 43,
+    "location": "Boston",
+    "study_id": "DNA-TEST-001",
+    "enrollment_date": "2024-01-15",
+    "contact": {
+        "email": "test.participant@example.com",
+        "emergency_contact": "Jane Doe"
+    },
+    "medical_history": {
+        "allergies": ["none"],
+        "medications": ["none"],
+        "previous_studies": []
+    }
+}

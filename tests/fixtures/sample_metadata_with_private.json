@@ -1,0 +1,24 @@
+{
+    "participant_id": "test-private-123",
+    "name": "Private Test Participant",
+    "date_of_birth": "1975-12-20",
+    "age": 48,
+    "location": "Seattle",
+    "_ssn": "123-45-6789",
+    "_internal_id": "PRIV-12345",
+    "study_id": "DNA-PRIV-001",
+    "contact": {
+        "email": "private.test@example.com",
+        "_phone": "555-0123",
+        "_emergency_contact_ssn": "987-65-4321"
+    },
+    "medical_history": {
+        "allergies": ["peanuts"],
+        "_medical_record_number": "MR-789456",
+        "medications": ["aspirin"]
+    },
+    "_system_metadata": {
+        "_created_by": "system_admin",
+        "_last_modified": "2024-01-15T10:30:00Z"
+    }
+}

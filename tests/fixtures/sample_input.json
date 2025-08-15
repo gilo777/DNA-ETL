@@ -1,0 +1,4 @@
+{
+    "context_path": "/path/to/participant/directory",
+    "results_path": "/path/to/output/file.json"
+}
