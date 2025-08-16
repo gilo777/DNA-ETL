@@ -8,6 +8,7 @@ class MetaDataProcessor:
     Methods:
         remove_private_keys(meta_data : dict) -> dict: Removes private keys from metadata dictionaries.
     """
+
     def remove_private_keys(self, meta_data: dict) -> dict:
         """
         Recursively removes all private keys from a metadata dictionary.

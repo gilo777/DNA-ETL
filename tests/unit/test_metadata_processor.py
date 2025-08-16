@@ -16,16 +16,12 @@ class TestMetaDataProcessor:
             "_private_id": "secret123",
             "age": 45,
             "_internal_note": "confidential",
-            "location": "Boston"
+            "location": "Boston",
         }
 
         result = self.processor.remove_private_keys(metadata)
 
-        expected = {
-            "name": "John Doe",
-            "age": 45,
-            "location": "Boston"
-        }
+        expected = {"name": "John Doe", "age": 45, "location": "Boston"}
 
         assert result == expected
         assert "_private_id" not in result
@@ -41,12 +37,12 @@ class TestMetaDataProcessor:
                 "contact": {
                     "email": "jane@example.com",
                     "_phone": "555-1234",
-                    "_emergency_contact": "John Doe"
+                    "_emergency_contact": "John Doe",
                 },
-                "age": 35
+                "age": 35,
             },
             "_system_id": "sys123",
-            "study_id": "DNA-001"
+            "study_id": "DNA-001",
         }
 
         result = self.processor.remove_private_keys(metadata)
@@ -54,12 +50,10 @@ class TestMetaDataProcessor:
         expected = {
             "participant": {
                 "name": "Jane Doe",
-                "contact": {
-                    "email": "jane@example.com"
-                },
-                "age": 35
+                "contact": {"email": "jane@example.com"},
+                "age": 35,
             },
-            "study_id": "DNA-001"
+            "study_id": "DNA-001",
         }
 
         assert result == expected
@@ -74,10 +68,7 @@ class TestMetaDataProcessor:
             "name": "Alice Smith",
             "age": 30,
             "location": "Seattle",
-            "contact": {
-                "email": "alice@example.com",
-                "address": "123 Main St"
-            }
+            "contact": {"email": "alice@example.com", "address": "123 Main St"},
         }
 
         result = self.processor.remove_private_keys(metadata)
@@ -91,10 +82,7 @@ class TestMetaDataProcessor:
         metadata = {
             "_secret1": "value1",
             "_secret2": "value2",
-            "_nested": {
-                "_private": "data",
-                "_more_private": "info"
-            }
+            "_nested": {"_private": "data", "_more_private": "info"},
         }
 
         result = self.processor.remove_private_keys(metadata)
@@ -119,16 +107,13 @@ class TestMetaDataProcessor:
                     "level3": {
                         "public_data": "visible",
                         "_private_data": "hidden",
-                        "level4": {
-                            "_deep_secret": "classified",
-                            "deep_public": "open"
-                        }
+                        "level4": {"_deep_secret": "classified", "deep_public": "open"},
                     },
-                    "_level2_private": "secret"
+                    "_level2_private": "secret",
                 },
-                "public_level2": "data"
+                "public_level2": "data",
             },
-            "_top_level_private": "hidden"
+            "_top_level_private": "hidden",
         }
 
         result = self.processor.remove_private_keys(metadata)
@@ -138,12 +123,10 @@ class TestMetaDataProcessor:
                 "level2": {
                     "level3": {
                         "public_data": "visible",
-                        "level4": {
-                            "deep_public": "open"
-                        }
+                        "level4": {"deep_public": "open"},
                     }
                 },
-                "public_level2": "data"
+                "public_level2": "data",
             }
         }
 
@@ -161,11 +144,7 @@ class TestMetaDataProcessor:
             "is_active": True,
             "scores": [85, 90, 78],
             "_private_score": 95,
-            "nested": {
-                "count": 10,
-                "_private_count": 20,
-                "ratio": 0.75
-            }
+            "nested": {"count": 10, "_private_count": 20, "ratio": 0.75},
         }
 
         result = self.processor.remove_private_keys(metadata)
@@ -175,10 +154,7 @@ class TestMetaDataProcessor:
             "height": 5.9,
             "is_active": True,
             "scores": [85, 90, 78],
-            "nested": {
-                "count": 10,
-                "ratio": 0.75
-            }
+            "nested": {"count": 10, "ratio": 0.75},
         }
 
         assert result == expected
@@ -191,12 +167,12 @@ class TestMetaDataProcessor:
     def test_remove_private_keys_mixed_underscore_cases(self):
         """Test handling of various underscore patterns."""
         metadata = {
-            "_private": "hidden",           # Should be removed
-            "__dunder": "also_hidden",      # Should be removed (starts with _)
-            "not_private": "visible",       # Should be kept (underscore not at start)
-            "public_": "visible",           # Should be kept (underscore at end)
-            "mid_underscore": "visible",    # Should be kept (underscore in middle)
-            "_": "single_underscore"        # Should be removed
+            "_private": "hidden",  # Should be removed
+            "__dunder": "also_hidden",  # Should be removed (starts with _)
+            "not_private": "visible",  # Should be kept (underscore not at start)
+            "public_": "visible",  # Should be kept (underscore at end)
+            "mid_underscore": "visible",  # Should be kept (underscore in middle)
+            "_": "single_underscore",  # Should be removed
         }
 
         result = self.processor.remove_private_keys(metadata)
@@ -204,7 +180,7 @@ class TestMetaDataProcessor:
         expected = {
             "not_private": "visible",
             "public_": "visible",
-            "mid_underscore": "visible"
+            "mid_underscore": "visible",
         }
 
         assert result == expected
@@ -212,7 +188,9 @@ class TestMetaDataProcessor:
         assert "__dunder" not in result
         assert "_" not in result
 
-    def test_remove_private_keys_complex_real_world_example(self, sample_metadata_with_private):
+    def test_remove_private_keys_complex_real_world_example(
+        self, sample_metadata_with_private
+    ):
         """Test with complex real-world metadata structure."""
         result = self.processor.remove_private_keys(sample_metadata_with_private)
 
@@ -237,10 +215,7 @@ class TestMetaDataProcessor:
         original_metadata = {
             "public": "data",
             "_private": "secret",
-            "nested": {
-                "public_nested": "visible",
-                "_private_nested": "hidden"
-            }
+            "nested": {"public_nested": "visible", "_private_nested": "hidden"},
         }
         original_copy = original_metadata.copy()
 
@@ -260,14 +235,8 @@ class TestMetaDataProcessor:
         """Test handling of nested dictionaries that become empty after cleaning."""
         metadata = {
             "valid_data": "keep",
-            "empty_after_cleaning": {
-                "_all": "private",
-                "_data": "removed"
-            },
-            "partial_cleaning": {
-                "keep_this": "data",
-                "_remove_this": "private"
-            }
+            "empty_after_cleaning": {"_all": "private", "_data": "removed"},
+            "partial_cleaning": {"keep_this": "data", "_remove_this": "private"},
         }
 
         result = self.processor.remove_private_keys(metadata)
@@ -275,9 +244,7 @@ class TestMetaDataProcessor:
         expected = {
             "valid_data": "keep",
             "empty_after_cleaning": {},  # Empty dict after removing private keys
-            "partial_cleaning": {
-                "keep_this": "data"
-            }
+            "partial_cleaning": {"keep_this": "data"},
         }
 
         assert result == expected
@@ -290,7 +257,7 @@ class TestMetaDataProcessor:
         metadata = {
             "string_key": "value",
             "123": "numeric_looking_key",  # String key that looks numeric
-            "_private": "secret"
+            "_private": "secret",
         }
 
         result = self.processor.remove_private_keys(metadata)

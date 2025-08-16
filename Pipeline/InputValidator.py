@@ -3,9 +3,16 @@ import uuid
 from pathlib import Path
 from typing import List, Tuple
 
-from Exceptions.ValidateExceptions import InputFileDoesNotExist, InvalidInputKeys, InvalidUUID, InvalidUUID, \
-    ContextPathDoesNotExist
+from Exceptions.ValidateExceptions import (
+    InputFileDoesNotExist,
+    InvalidInputKeys,
+    InvalidUUID,
+    InvalidUUID,
+    ContextPathDoesNotExist, InvalidJSONFormat,
+)
 from Pipeline.DataModels.ValidPaths import ValidPaths
+
+
 class InputValidator:
     """
     Validates input JSON files and verifies the existence of required genetic data files.
@@ -19,10 +26,11 @@ class InputValidator:
     Methods:
           validate(path : str): Validates an input JSON file and verifies all referenced genetic data files exist.
     """
+
     def __init__(self, valid_keys: List[str]):
         self.valid_keys = valid_keys
 
-    def validate(self, path : str) -> Tuple[ValidPaths, str]:
+    def validate(self, path: str) -> Tuple[ValidPaths, str]:
         """
         Performs comprehensive validation including JSON structure, key validation,
         UUID format verification, and file existence checks for DNA and metadata files.
@@ -39,6 +47,8 @@ class InputValidator:
                 input_dict = json.load(file)
         except FileNotFoundError:
             raise InputFileDoesNotExist(path)
+        except json.decoder.JSONDecodeError:
+            raise InvalidJSONFormat(path)
         # Validate keys in the dictionary are as required.
         if set(self.valid_keys) != set(input_dict.keys()):
             raise InvalidInputKeys(path)
@@ -54,10 +64,14 @@ class InputValidator:
         if not context_path.exists():
             raise ContextPathDoesNotExist(context_path)
         # Validate paths inside the patient directory.
-        dna_path = context_path / (patient_uuid + '_dna.txt')
-        metadata_path = context_path / (patient_uuid + '_dna.json')
+        dna_path = context_path / (patient_uuid + "_dna.txt")
+        metadata_path = context_path / (patient_uuid + "_dna.json")
         if not dna_path.exists() or not metadata_path.exists():
             raise InputFileDoesNotExist(context_path)
 
-        return ValidPaths(dna_path, metadata_path, context_path, Path(input_dict["results_path"])), patient_uuid
-
+        return (
+            ValidPaths(
+                dna_path, metadata_path, context_path, Path(input_dict["results_path"])
+            ),
+            patient_uuid,
+        )

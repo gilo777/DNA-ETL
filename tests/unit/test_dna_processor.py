@@ -15,7 +15,9 @@ class TestDNAProcessor:
         sequence = "ATCG"  # 2 GC out of 4 = 50%
         result = self.processor._analyze_sequence(sequence)
 
-        assert result["gc_content"] == 50.0  # Implementation returns rounded to 2 decimal places
+        assert (
+            result["gc_content"] == 50.0
+        )  # Implementation returns rounded to 2 decimal places
         assert "codons" in result
         assert isinstance(result["codons"], dict)
 
@@ -58,13 +60,6 @@ class TestDNAProcessor:
         assert result["gc_content"] == 0.0  # No G or C
         assert result["codons"] == {}  # No complete codons
 
-    def test_analyze_sequence_empty_sequence(self):
-        """Test handling of empty sequences."""
-        sequence = ""
-        # This will cause division by zero in the actual implementation
-        # Since we assume valid input, we skip this test
-        pytest.skip("Empty sequences not expected in valid DNA input")
-
     def test_longest_common_subsequence_found(self):
         """Test LCS finding with common subsequences."""
         seq1 = "ATCGCAT"
@@ -73,7 +68,7 @@ class TestDNAProcessor:
         result = self.processor._longest_common_subsequence(seq1, seq2)
 
         assert isinstance(result, str)
-        assert len(result) > 0
+        assert result == 'CG'
         # Verify it's actually a subsequence of both
         for char in result:
             assert char in seq1
@@ -108,6 +103,9 @@ class TestDNAProcessor:
         assert isinstance(result["sequences"], list)
         assert isinstance(result["length"], int)
         assert result["length"] == len(result["value"])
+        assert result["sequences"] == [1,4]
+        assert result["value"] == 'CGCG'
+
 
     def test_find_lcs_single_sequence(self):
         """Test LCS with only one sequence."""
@@ -153,15 +151,15 @@ class TestDNAProcessor:
         assert "sequences" in result
         assert "most_common_codon" in result
         assert "lcs" in result
-        
+
         # Verify data types
         assert isinstance(result["sequences"], list)
         assert isinstance(result["most_common_codon"], str)
         assert isinstance(result["lcs"], dict)
-        
+
         # Verify sequence processing
         assert len(result["sequences"]) == len(sample_dna_sequences)
-        
+
         for seq_result in result["sequences"]:
             assert "gc_content" in seq_result
             assert "codons" in seq_result
@@ -177,7 +175,7 @@ class TestDNAProcessor:
         dna_data1.sequences = ["ATCATC"]  # ATC appears twice
         processor.transform_dna(dna_data1)
 
-        # Second batch  
+        # Second batch
         dna_data2 = DNAData()
         dna_data2.sequences = ["ATCGCG"]  # ATC appears once, GCG appears once
         result = processor.transform_dna(dna_data2)
@@ -200,29 +198,31 @@ class TestDNAProcessor:
     def test_gc_content_edge_cases(self):
         """Test GC content calculation with various edge cases."""
         test_cases = [
-            ("GCGC", 100.0),        # All GC: 4/4 = 100%
-            ("ATAT", 0.0),          # No GC: 0/4 = 0%
-            ("ATGC", 50.0),         # Half GC: 2/4 = 50%
-            ("GGGCCCAAATTT", 50.0), # Mixed sequence: 6/12 = 50%
+            ("GCGC", 100.0),  # All GC: 4/4 = 100%
+            ("ATAT", 0.0),  # No GC: 0/4 = 0%
+            ("ATGC", 50.0),  # Half GC: 2/4 = 50%
+            ("GGGCCCAAATTT", 50.0),  # Mixed sequence: 6/12 = 50%
         ]
-        
+
         for sequence, expected_gc in test_cases:
             processor = DNAProcessor()  # Fresh processor for each test
             result = processor._analyze_sequence(sequence)
-            assert result["gc_content"] == expected_gc, \
-                f"Failed for sequence {sequence}: got {result['gc_content']}, expected {expected_gc}"
+            assert (
+                result["gc_content"] == expected_gc
+            ), f"Failed for sequence {sequence}: got {result['gc_content']}, expected {expected_gc}"
 
     def test_codon_counting_edge_cases(self):
         """Test codon counting with various sequence lengths."""
         test_cases = [
-            ("ATCATCATC", {"ATC": 3}),           # Perfect triplets
-            ("ATCATCA", {"ATC": 2}),             # Remainder ignored (TCA incomplete)
-            ("AT", {}),                          # Too short
+            ("ATCATCATC", {"ATC": 3}),  # Perfect triplets
+            ("ATCATCA", {"ATC": 2}),  # Remainder ignored (TCA incomplete)
+            ("AT", {}),  # Too short
         ]
-        
+
         for sequence, expected_codons in test_cases:
             # Reset processor to avoid global state contamination
             processor = DNAProcessor()
             result = processor._analyze_sequence(sequence)
-            assert result["codons"] == expected_codons, \
-                f"Failed for sequence {sequence}"
+            assert (
+                result["codons"] == expected_codons
+            ), f"Failed for sequence {sequence}"

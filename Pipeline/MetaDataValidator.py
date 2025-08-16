@@ -1,7 +1,17 @@
 from datetime import datetime
-from Constants import YEAR_RANGE_LOWER, YEAR_RANGE_UPPER, MAX_VALUE_LEN, MIN_AGE, VALID_DATE_FORMATS
-from Exceptions.ValidateExceptions import DateOutOfRange, InvalidDateParsingFormat, InvalidBirthDate, \
-    InvalidParticipantAge
+from Constants import (
+    YEAR_RANGE_LOWER,
+    YEAR_RANGE_UPPER,
+    MAX_VALUE_LEN,
+    MIN_AGE,
+    VALID_DATE_FORMATS,
+)
+from Exceptions.ValidateExceptions import (
+    DateOutOfRange,
+    InvalidDateParsingFormat,
+    InvalidBirthDate,
+    InvalidParticipantAge,
+)
 
 
 class MetaDataValidator:
@@ -10,7 +20,8 @@ class MetaDataValidator:
     string length limits, and year range constraints. Supports recursive
     validation for nested dictionary structures.
     """
-    def validate_metadata(self, metadata_dict : dict) -> None:
+
+    def validate_metadata(self, metadata_dict: dict) -> None:
         """
         Recursively validates all key-value pairs in a metadata dictionary.
 
@@ -28,7 +39,7 @@ class MetaDataValidator:
             else:
                 try:
                     # Age validation
-                    if metadata_key == 'date_of_birth':
+                    if metadata_key == "date_of_birth":
                         self._validate_birth_date_value(metadata_value)
                     # Value validation
                     elif isinstance(metadata_value, str):
@@ -69,7 +80,7 @@ class MetaDataValidator:
         else:
             raise InvalidBirthDate(value)
 
-    def _is_date_string(self, value : str, date_formats=None) -> bool:
+    def _is_date_string(self, value: str, date_formats=None) -> bool:
         """
         Checks if a string matches any of the accepted date formats.
 
@@ -90,7 +101,7 @@ class MetaDataValidator:
                 continue
         return False
 
-    def _parse_date_string(self, value : str, date_formats=None) -> datetime:
+    def _parse_date_string(self, value: str, date_formats=None) -> datetime:
         """
         Parses a date string into a datetime object using accepted formats.
         Attempts to parse the string using each format in the date_formats list
@@ -111,7 +122,7 @@ class MetaDataValidator:
                 continue
         return None
 
-    def _calculate_age(self, birth_date : datetime) -> int:
+    def _calculate_age(self, birth_date: datetime) -> int:
         """
         Calculates a person's current age from their birth date.
         Computes age by comparing birth date to current date.
@@ -121,9 +132,8 @@ class MetaDataValidator:
             int: Current age in years
         """
         today = datetime.now()
-        return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-
-
-
-
-
+        return (
+            today.year
+            - birth_date.year
+            - ((today.month, today.day) < (birth_date.month, birth_date.day))
+        )

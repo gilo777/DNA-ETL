@@ -13,7 +13,16 @@ class Loader:
         create_output(meta_data : dict, dna_data : dict, paths : ValidPaths, start_time : datetime, end_time : datetime, participant_id : str) -> None:
             Creates and saves a structured output file containing processed genetic data and processing metadata.
     """
-    def create_output(self, meta_data : dict, dna_data : dict, paths : ValidPaths, start_time : str, end_time : str, participant_id : str) -> None:
+
+    def create_output(
+        self,
+        meta_data: dict,
+        dna_data: dict,
+        paths: ValidPaths,
+        start_time: str,
+        end_time: str,
+        participant_id: str,
+    ) -> None:
         """
         Combines processed DNA data and metadata with processing information (timing, paths)
         into a standardized JSON output format and persists it to the specified output path.
@@ -47,8 +56,8 @@ class Loader:
         }
         # Loads the dictionary content as Json to the output path.
         try:
-            with open(paths.output_path, 'w+') as f:
-                json.dump(output, f, indent = 4)
+            with open(paths.output_path, "w+") as f:
+                json.dump(output, f, indent=4)
             print(f"Output saved successfully to: {paths.output_path}")
         except Exception as e:
             raise LoaderException(participant_id)

@@ -4,6 +4,7 @@ from typing import Tuple
 from Pipeline.DataModels import ValidPaths
 from Pipeline.DataModels.DNAData import DNAData
 
+
 class DataExtractor:
     """
     Handles extraction and parsing of metadata and DNA sequence data from files.
@@ -22,7 +23,7 @@ class DataExtractor:
             Reads DNA sequences from a text file and stores them in a DnaData object.
     """
 
-    def extract(self, paths : ValidPaths) -> Tuple[dict, DNAData]:
+    def extract(self, paths: ValidPaths) -> Tuple[dict, DNAData]:
         """
         Coordinates the extraction of both metadata and DNA data from specified file paths.
 
@@ -32,7 +33,6 @@ class DataExtractor:
         metadata = self._extract_metadata(paths.metadata_path)
         dna_data = self._extract_dna(paths.dna_path)  ## assuming DNA data is valid.
         return metadata, dna_data
-
 
     def _extract_metadata(self, metadata_path: str) -> dict:
         """

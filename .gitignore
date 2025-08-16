@@ -132,3 +132,6 @@ ExampleData/participants/*/out
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Benchmark directory
+benchmark/

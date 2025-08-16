@@ -22,10 +22,10 @@ class TestDataExtractor:
             "name": "John Doe",
             "age": 45,
             "date_of_birth": "1980-05-15",
-            "location": "Boston"
+            "location": "Boston",
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(test_metadata, f)
             metadata_path = f.name
 
@@ -46,26 +46,18 @@ class TestDataExtractor:
                 "demographics": {
                     "age": 35,
                     "gender": "F",
-                    "location": {
-                        "city": "Seattle",
-                        "state": "WA",
-                        "zip": "98101"
-                    }
+                    "location": {"city": "Seattle", "state": "WA", "zip": "98101"},
                 },
                 "medical_history": {
                     "allergies": ["peanuts", "shellfish"],
                     "medications": [],
-                    "conditions": ["hypertension"]
-                }
+                    "conditions": ["hypertension"],
+                },
             },
-            "study": {
-                "id": "DNA-STUDY-001",
-                "phase": 2,
-                "enrolled_date": "2024-01-15"
-            }
+            "study": {"id": "DNA-STUDY-001", "phase": 2, "enrolled_date": "2024-01-15"},
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(complex_metadata, f)
             metadata_path = f.name
 
@@ -82,7 +74,7 @@ class TestDataExtractor:
         """Test extraction of empty JSON metadata."""
         empty_metadata = {}
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(empty_metadata, f)
             metadata_path = f.name
 
@@ -98,14 +90,14 @@ class TestDataExtractor:
         """Test extraction of valid DNA sequences from text file."""
         test_sequences = [
             "ATCGCGATCGTAGCTA",
-            "GCTAGCTAGCTAGCTA", 
+            "GCTAGCTAGCTAGCTA",
             "TTAATTAATTAATTAA",
-            "CGCGCGCGCGCGCGCG"
+            "CGCGCGCGCGCGCGCG",
         ]
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             for seq in test_sequences:
-                f.write(seq + '\n')
+                f.write(seq + "\n")
             dna_path = f.name
 
         cleanup_files(dna_path)
@@ -115,7 +107,7 @@ class TestDataExtractor:
         assert isinstance(result, DNAData)
         assert result.sequences == test_sequences
         assert len(result.sequences) == 4
-        
+
         # Verify each sequence is properly extracted
         for i, expected_seq in enumerate(test_sequences):
             assert result.sequences[i] == expected_seq
@@ -125,7 +117,7 @@ class TestDataExtractor:
         dna_content = "ATCGCGATCG\n\nGCTAGCTAGC\n\n\nTTAATTAAGG\n"
         expected_sequences = ["ATCGCGATCG", "GCTAGCTAGC", "TTAATTAAGG"]
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write(dna_content)
             dna_path = f.name
 
@@ -142,7 +134,7 @@ class TestDataExtractor:
         dna_content = "  ATCGCGATCG  \n\t\tGCTAGCTAGC\t\n   TTAATTAAGG   \n"
         expected_sequences = ["ATCGCGATCG", "GCTAGCTAGC", "TTAATTAAGG"]
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write(dna_content)
             dna_path = f.name
 
@@ -152,14 +144,14 @@ class TestDataExtractor:
 
         assert isinstance(result, DNAData)
         assert result.sequences == expected_sequences
-        
+
         # Verify no whitespace remains
         for seq in result.sequences:
             assert seq == seq.strip()
 
     def test_extract_dna_empty_file(self, cleanup_files):
         """Test DNA extraction from empty file."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             # Write nothing to file
             dna_path = f.name
 
@@ -175,7 +167,7 @@ class TestDataExtractor:
         """Test DNA extraction from file with only empty lines."""
         dna_content = "\n\n\n\t\t\n   \n"
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write(dna_content)
             dna_path = f.name
 
@@ -191,8 +183,8 @@ class TestDataExtractor:
         """Test DNA extraction with single sequence."""
         single_sequence = "ATCGCGATCGTAGCTACGCGCGCG"
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
-            f.write(single_sequence + '\n')
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+            f.write(single_sequence + "\n")
             dna_path = f.name
 
         cleanup_files(dna_path)
@@ -203,7 +195,9 @@ class TestDataExtractor:
         assert result.sequences == [single_sequence]
         assert len(result.sequences) == 1
 
-    def test_extract_coordinated_extraction(self, temp_metadata_file, temp_dna_file, cleanup_files):
+    def test_extract_coordinated_extraction(
+        self, temp_metadata_file, temp_dna_file, cleanup_files
+    ):
         """Test coordinated extraction of both metadata and DNA data."""
         cleanup_files(temp_metadata_file)
         cleanup_files(temp_dna_file)
@@ -212,7 +206,7 @@ class TestDataExtractor:
             dna_path=temp_dna_file,
             metadata_path=temp_metadata_file,
             context_path="/tmp/test",
-            output_path="/tmp/test_output.json"
+            output_path="/tmp/test_output.json",
         )
 
         metadata, dna_data = self.extractor.extract(paths)
@@ -222,7 +216,7 @@ class TestDataExtractor:
         assert "participant_id" in metadata
         assert metadata["name"] == "John Doe"
 
-        # Verify DNA data extraction  
+        # Verify DNA data extraction
         assert isinstance(dna_data, DNAData)
         assert len(dna_data.sequences) > 0
         assert all(isinstance(seq, str) for seq in dna_data.sequences)
@@ -230,7 +224,7 @@ class TestDataExtractor:
     def test_extract_with_real_fixtures(self, cleanup_files):
         """Test extraction using real fixture files."""
         # Use actual fixture files
-        fixtures_dir = Path("/Users/gilamir/PycharmProjects/DNA-ETL/tests/fixtures")
+        fixtures_dir = Path(__file__).parent.parent / "fixtures"
         metadata_path = fixtures_dir / "sample_metadata.json"
         dna_path = fixtures_dir / "sample_dna.txt"
 
@@ -238,7 +232,7 @@ class TestDataExtractor:
             dna_path=str(dna_path),
             metadata_path=str(metadata_path),
             context_path="/tmp/test",
-            output_path="/tmp/test_output.json"
+            output_path="/tmp/test_output.json",
         )
 
         metadata, dna_data = self.extractor.extract(paths)
@@ -252,28 +246,27 @@ class TestDataExtractor:
         # Verify DNA data structure
         assert isinstance(dna_data, DNAData)
         assert len(dna_data.sequences) > 0
-        
+
         # Verify sequences contain valid DNA characters
-        valid_chars = set('ATCG')
+        valid_chars = set("ATCG")
         for sequence in dna_data.sequences:
-            assert all(char in valid_chars for char in sequence), f"Invalid characters in sequence: {sequence}"
+            assert all(
+                char in valid_chars for char in sequence
+            ), f"Invalid characters in sequence: {sequence}"
 
     def test_extract_preserves_data_types_in_metadata(self, cleanup_files):
         """Test that metadata extraction preserves various data types."""
         test_metadata = {
             "participant_id": "type-test-789",
-            "age": 42,                          # int
-            "height": 5.75,                     # float
-            "is_active": True,                  # bool
-            "allergies": ["peanuts", "eggs"],   # list
-            "scores": [85, 90, 78],            # list of ints
-            "metadata": {                       # nested dict
-                "study_phase": 2,
-                "enrolled": True
-            }
+            "age": 42,  # int
+            "height": 5.75,  # float
+            "is_active": True,  # bool
+            "allergies": ["peanuts", "eggs"],  # list
+            "scores": [85, 90, 78],  # list of ints
+            "metadata": {"study_phase": 2, "enrolled": True},  # nested dict
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(test_metadata, f)
             metadata_path = f.name
 
@@ -295,10 +288,10 @@ class TestDataExtractor:
         """Test extraction of larger DNA files."""
         # Generate many sequences
         large_sequences = [f"ATCG{'CGAT' * 25}{i:04d}" for i in range(100)]
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             for seq in large_sequences:
-                f.write(seq + '\n')
+                f.write(seq + "\n")
             dna_path = f.name
 
         cleanup_files(dna_path)
@@ -317,10 +310,12 @@ class TestDataExtractor:
             "location": "São Paulo",
             "notes": "Patient is très bien",
             "special_chars": "αβγδε",
-            "emoji": "🧬 DNA study participant"
+            "emoji": "🧬 DNA study participant",
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as f:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as f:
             json.dump(unicode_metadata, f, ensure_ascii=False)
             metadata_path = f.name
 

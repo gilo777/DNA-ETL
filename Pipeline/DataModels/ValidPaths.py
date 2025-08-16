@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class ValidPaths:
     """
     Object that holds relevant paths for easy access.
     """
+
     def __init__(self, dna_path, metadata_path, context_path, output_path):
         """
         Initialize the class with file paths for processing genetic data.
@@ -18,4 +20,3 @@ class ValidPaths:
         self.metadata_path = metadata_path
         self.context_path = context_path
         self.output_path = output_path
-

@@ -2,9 +2,18 @@ from typing import Tuple, List
 
 from Constants import valid_exceptions
 from Exceptions.LoaderExceptions import LoaderException
-from Exceptions.ValidateExceptions import InputFileDoesNotExist, DataFileDoesNotExist, InvalidInputKeys, InvalidUUID, \
-    ContextPathDoesNotExist, InvalidDateParsingFormat, DateOutOfRange, InvalidBirthDate, InvalidParticipantAge, \
-    InvalidValueLength
+from Exceptions.ValidateExceptions import (
+    InputFileDoesNotExist,
+    DataFileDoesNotExist,
+    InvalidInputKeys,
+    InvalidUUID,
+    ContextPathDoesNotExist,
+    InvalidDateParsingFormat,
+    DateOutOfRange,
+    InvalidBirthDate,
+    InvalidParticipantAge,
+    InvalidValueLength,
+)
 
 
 class StatusCodeExceptionTranslator:
@@ -14,8 +23,10 @@ class StatusCodeExceptionTranslator:
     It recognizes all custom exceptions defined in the application and provides fallback
     handling for unknown exceptions.
     """
+
     def __init__(self, exceptions: List[Exception]):
         self.valid_exceptions = valid_exceptions
+
     def translate_custom_exceptions(self, e: Exception) -> Tuple[int, str]:
         """
          This method checks if the provided exception is one of the recognized custom

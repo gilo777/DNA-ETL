@@ -9,6 +9,7 @@ from Pipeline.Transform.DNAProcessor import DNAProcessor
 from Pipeline.Transform.MetaDataProcessor import MetaDataProcessor
 from Pipeline.Loader import Loader
 
+
 class ETLOrchestrator:
     """
     Coordinates a multi-stage data processing pipeline for genetic data analysis.
@@ -29,8 +30,9 @@ class ETLOrchestrator:
           orchestrate(input_path : str) -> str:
              Executes the complete data processing pipeline for a given input path.
     """
+
     def __init__(self):
-        self.input_validator = InputValidator(valid_keys = VALID_INPUT_KEYS)
+        self.input_validator = InputValidator(valid_keys=VALID_INPUT_KEYS)
         self.data_extractor = DataExtractor()
         self.DNA_processor = DNAProcessor()
         self.MetaData_processor = MetaDataProcessor()
@@ -38,7 +40,7 @@ class ETLOrchestrator:
         self.metadata_validator = MetaDataValidator()
         self.exception_translator = StatusCodeExceptionTranslator(valid_exceptions)
 
-    def orchestrate(self, input_path : str) -> Tuple[int, str]:
+    def orchestrate(self, input_path: str) -> Tuple[int, str]:
         """
         The orchestrate method executes a complete genetic data processing pipeline that validates,
         extracts, transforms, and outputs DNA sequence data and metadata
@@ -52,10 +54,7 @@ class ETLOrchestrator:
         """
         # Validate input.
         try:
-            validation_result = self.input_validator.validate(input_path)
-            if validation_result is None:
-                raise Exception(f"Input validation failed for path: {input_path}")
-            verified_paths, participant_id = validation_result
+            verified_paths, participant_id = self.input_validator.validate(input_path)
             # Capture time when started processing
             start_time = datetime.now()
             # Extract data
@@ -69,13 +68,14 @@ class ETLOrchestrator:
             # Capture time when finished processing.
             end_time = datetime.now()
             # Generate output file, return participant ID for documentation.
-            self.loader.create_output(transformed_metadata,
-                                      transformed_dna,
-                                      verified_paths,
-                                      start_time,
-                                      end_time,
-                                      participant_id)
+            self.loader.create_output(
+                transformed_metadata,
+                transformed_dna,
+                verified_paths,
+                start_time,
+                end_time,
+                participant_id,
+            )
         except Exception as e:
             return self.exception_translator.translate_custom_exceptions(e)
         return 0, f"Pipline completed for participant ID: {participant_id}"
-

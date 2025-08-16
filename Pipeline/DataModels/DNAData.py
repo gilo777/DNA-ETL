@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class DNAData:
     """
@@ -8,5 +9,6 @@ class DNAData:
     Attributes:
         sequences (list): List of DNA sequences.
     """
+
     def __init__(self) -> None:
         self.sequences = []
