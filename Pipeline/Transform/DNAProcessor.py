@@ -89,8 +89,10 @@ class DNAProcessor:
     def _find_lcs(self, dna_data: DNAData) -> dict:
         """
         Finds the longest common subsequence among all DNA sequences.
+        Breaking ties by choosing the longest subsequence found in most sequences.
         The longest common subsequence between two DNA sequences- a single longest
         subsequence that appears in two (or more) sequences.
+
 
         :param dna_data: DNAData object containing sequences to compare
         :return: Dictionary with LCS value, participating sequences, and length

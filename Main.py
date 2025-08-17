@@ -58,6 +58,7 @@ def process_single_file(orchestrator : ETLOrchestrator, file_path : str) -> bool
     :param orchestrator: The ETL orchestrator instance to use for processing
     :param file_path: Path to the JSON configuration file to process
     :return:
+        bool: True if successful, False otherwise
     """
     result = orchestrator.orchestrate(file_path)
     if result[0] == 0:
